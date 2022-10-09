@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"name": "property-pros",
+			"path": "."
+		},
+		{
+			"name": "kittenTricks",
+			"path": "../kittenTricks"
+		},
+		{
+			"name": "property-pros-docs",
+			"path": "../property-pros-docs"
+		},
+		{
+			"name": "property-pros-service",
+			"path": "../property-pros-service"
+		},
+		{
+			"path": "../property-pros-sdk"
+		}
+	],
+	"settings": {}
+}
