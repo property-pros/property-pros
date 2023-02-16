@@ -1,22 +1,16 @@
 import {
-  ComponentProps,
   FunctionComponent,
-  FunctionComponentElement,
-  PropsWithChildren,
+  FunctionComponentElement
 } from "react";
 import { Link } from "react-router-native";
 import {
-  SIGN_IN_ROUTE,
-  DASHBOARD_ROUTE,
-  SIGN_UP_ROUTE,
-  NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE,
-  STATEMENT_VIEW_ROUTE,
+  DASHBOARD_ROUTE, NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE, SIGN_IN_ROUTE, SIGN_UP_ROUTE, STATEMENT_VIEW_ROUTE
 } from "../constants/Routes";
 
 export const RegistrationEntryLink: FunctionComponent = ({
   children,
 }): FunctionComponentElement<void> => (
-  <Link replace={true} to={SIGN_UP_ROUTE}>
+  <Link to={SIGN_UP_ROUTE}>
     {children}
   </Link>
 );

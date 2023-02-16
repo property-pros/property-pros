@@ -1,4 +1,3 @@
-import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   StyledComponentProps,
@@ -34,6 +33,7 @@ export const SafeAreaLayout: React.FC<SafeAreaLayoutProps> = ({
           {
             paddingTop: insets === "top" ? insetsConfig.top : 0,
             paddingBottom: insets === "bottom" ? insetsConfig.bottom : 0,
+            flex: 1,
           },
         ]}
       />

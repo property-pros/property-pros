@@ -24,7 +24,7 @@ const SignInScreen: FunctionComponent<
   const {
     signIn,
     setSigninPassword,
-    setSigninEmail,
+     setSignInEmail,
     signInEmail,
     signInPassword,
   } = useAuth();
@@ -62,7 +62,7 @@ const SignInScreen: FunctionComponent<
           placeholder="Email"
           accessoryRight={PersonIcon as any}
           value={signInEmail}
-          onChangeText={setSigninEmail}
+          onChangeText={setSignInEmail}
         />
         <Input
           style={styles.passwordInput}

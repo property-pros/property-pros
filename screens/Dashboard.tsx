@@ -1,45 +1,103 @@
-import { StyleSheet } from "react-native";
+import {
+  Button,
+  Divider,
+  Icon,
+  List,
+  ListItem,
+  Text
+} from "@ui-kitten/components";
+import { ComponentProps } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { LineChart, PieChart } from "../components/charts";
+import { useNavigation } from "../hooks";
 
-import { View } from "../components/Themed";
-import { default as PdfViewer } from "../components/PdfViewer";
-import { Button } from "@ui-kitten/components";
-import useNoteServiceAgreement from "../hooks/useNoteServiceAgreement";
-import { useMemo, useState, useEffect } from "react"
+const data = [
+  {
+    title: "Note Purchase Agreement Oct 2022",
+    description: "Note purchase agreement from your october investment",
+  },
+  {
+    title: "October 2022",
+    description: "Interest Statement for October",
+  },
+  {
+    title: "September 2022",
+    description: "Interest Statement for September",
+  },
+  {
+    title: "August 2022",
+    description: "Interest Statement for August",
+  },
+  {
+    title: "July 2022",
+    description: "Interest Statement for July",
+  },
+];
 
-export default function TabOneScreen({ navigation }: any) {
-  const [doc, setDoc] = useState<Buffer>();
-  const functions = useNoteServiceAgreement();
+export default () => {
+  const nav = useNavigation();
 
-  useEffect(() => {
-    (async () => {
-      const doc = (await functions.getNotePurchaseAgreementDoc()) as Buffer;
+  const renderItemAccessory = (props: any) => (
+    <Button size="tiny" onPress={() => nav.openStatementScreen()}>
+      <Text>VIEW</Text>
+    </Button>
+  );
 
-      setDoc(doc);
-    })();
-  }, []);
+  const renderItemIcon = (props: any) => <Icon {...props} name="file" />;
+
+  const renderItem = ({ item, index }: any) => (
+    <ListItem
+      title={`${item.title}`}
+      description={`${item.description}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={renderItemAccessory}
+    />
+  );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <PdfViewer doc={doc} />
-      </View>
-    </View>
+    <>
+      <DashboardSection>
+        <DasboardHeading>My Documents</DasboardHeading>
+        <List data={data} renderItem={renderItem} />
+      </DashboardSection>
+      <ScrollView>
+        <DashboardSection>
+          <DasboardHeading>My Account Value</DasboardHeading>
+          <LineChart />
+        </DashboardSection>
+        <DashboardSection>
+          <DasboardHeading>My Account Distribution</DasboardHeading>
+          <PieChart />
+        </DashboardSection>
+      </ScrollView>
+    </>
   );
-}
+};
+
+const DasboardHeading = ({ children }: ComponentProps<any>) => (
+  <Text style={styles.dashBoardHeading} category="h6" status="primary">
+    {children}
+  </Text>
+);
+
+const DashboardSection = ({ children }: ComponentProps<any>) => (
+  <View style={styles.dashboardSection}>
+    {children}
+    <Divider style={styles.dashboardDivider} />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  dashboardSection: {
+    marginTop: 15,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  dashboardDivider: {
+    marginTop: 15,
+  },
+  dashBoardHeading: {
+    marginLeft: 15,
   },
 });

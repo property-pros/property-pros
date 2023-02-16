@@ -1,25 +1,14 @@
-import React, { ReactElement } from "react";
-import { View, TouchableWithoutFeedback } from "react-native";
 import {
-  Button,
-  CheckBox,
-  Input,
-  Layout,
-  StyleService,
-  useStyleSheet,
-  Text,
-  Icon,
+  Button, Icon, StyleService, Text, useStyleSheet
 } from "@ui-kitten/components";
-import { ProfileAvatar } from "../../components/profile-avatar.component";
-import { EmailIcon, PersonIcon, PlusIcon } from "./extra/icons";
-import { KeyboardAvoidingView } from "./extra/3rd-party";
-import { LoginEntryLink } from "../../navigation/Links";
-import { useAuth } from "../../hooks";
+import React, { ReactElement } from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { Wizard } from "react-use-wizard";
 import { themedStyles as theme } from "../styles";
-import { Wizard, useWizard } from "react-use-wizard";
-import NotePurchaseAgreementProfileStep from "./Steps/NotePurchaseAgreementProfileStep";
+import { PlusIcon } from "./extra/icons";
 import NotePurchaseAgreementLegalAuthStep from "./Steps/NotePurchaseAgreementLegalAuthStep";
 import NotePurchaseAgreementPlaintiffStep from "./Steps/NotePurchaseAgreementPlaintiffStep";
+import NotePurchaseAgreementProfileStep from "./Steps/NotePurchaseAgreementProfileStep";
 
 export default ({ navigation }: any): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
@@ -28,17 +17,7 @@ export default ({ navigation }: any): React.ReactElement => {
   const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
   const styles = useStyleSheet({ ...theme, ...themedStyles });
-
-  const { isLastStep, handleStep } = useWizard();
-
-  const { signUp } = useAuth();
-
-  // This handler is optional
-  handleStep(() => {
-    if (isLastStep) {
-      signUp();
-    }
-  });
+ 
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.goBack();

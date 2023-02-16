@@ -1,18 +1,15 @@
+import {
+  Radio,
+  RadioGroup, StyleService,
+  Text,
+  useStyleSheet
+} from "@ui-kitten/components";
 import { FunctionComponent, ReactElement } from "react";
 import { View } from "react-native";
-import {
-  StyleService,
-  Text,
-  useStyleSheet,
-  Radio,
-  RadioGroup,
-} from "@ui-kitten/components";
-import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
-import SignUpStep from "./SignUpStep";
-import { themedStyles as theme } from "../../styles";
-import { ProfileAvatar } from "../../../components/profile-avatar.component";
 import { useAuth } from "../../../hooks";
-import { PersonIcon } from "../extra/icons";
+import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
+import { themedStyles as theme } from "../../styles";
+import SignUpStep from "./SignUpStep";
 
 const NotePurchaseAgreementStep: FunctionComponent<
   INotePurchaseAgreementStepProps
@@ -33,7 +30,7 @@ const NotePurchaseAgreementStep: FunctionComponent<
           describing such lawsuit(s), arbitration(s) or legal proceeding(s).
           Check the appropriate box below:
         </Text>
-        <RadioGroup selectedIndex={+signUpHasServedAsPlaintiff} onChange={()=> setSignUpHasServedAsPlaintiff(!signUpHasServedAsPlaintiff)}>
+        <RadioGroup selectedIndex={signUpHasServedAsPlaintiff ? 1 : 0} onChange={()=> setSignUpHasServedAsPlaintiff(!signUpHasServedAsPlaintiff)}>
           <Radio
             style={styles.formItem}
           >

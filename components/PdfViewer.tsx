@@ -1,30 +1,23 @@
-import { StyleSheet } from "react-native";
-
-import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
-import { Button } from "@ui-kitten/components";
-import useNoteServiceAgreement from "../hooks/useNoteServiceAgreement";
-import { useMemo, useState, useEffect } from "react";
-
 import PDFReader from "@hashiprobr/expo-pdf-reader";
+import { StyleSheet, Text } from "react-native";
+import { View } from "../components/Themed";
 
-export default function TabOneScreen({ doc }: any) {
-  const [docSource, setDocSource] = useState("data:application/pdf;base64,");
-  const functions = useNoteServiceAgreement();
+export default function TabOneScreen({ doc, base64Conent }: any) {
+  let content = base64Conent || doc?.toString("base64");
 
-  useEffect(() => {
-    (async () => {
-      const doc = (await functions.getNotePurchaseAgreementDoc()) as Buffer;
-
-      setDocSource(`data:application/pdf;base64,${doc.toString("base64")}`);
-    })();
-  }, []);
-
-  return (
+  return content != null && content != "" ? (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <PDFReader source={{ base64: docSource }} />
+        <PDFReader      
+          source={{            
+            base64: `data:application/pdf;base64,${content}`,
+          }}
+        />
       </View>
+    </View>
+  ) : (
+    <View>
+      <Text>doc not found</Text>
     </View>
   );
 }

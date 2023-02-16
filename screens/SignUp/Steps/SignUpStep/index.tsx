@@ -1,45 +1,45 @@
-import React, { FunctionComponent, ReactElement, useRef } from "react";
-import { View, useWindowDimensions } from "react-native";
 import {
   Button,
   Layout,
   StyleService,
   Text,
-  useStyleSheet,
+  useStyleSheet
 } from "@ui-kitten/components";
-import { KeyboardAvoidingView } from "../../extra/3rd-party";
-import { useNavigation } from "../../../../hooks";
-import { RegistrationEntryLink } from "../../../../navigation/Links";
-import { IPropertyProsSignUpItemProps } from "../../../../interface/interfaces";
-import { useWizard } from "react-use-wizard";
+import { FunctionComponent, ReactElement, useRef } from "react";
+import { useWindowDimensions, View } from "react-native";
 import * as Animatable from "react-native-animatable";
+import { useWizard } from "react-use-wizard";
 import { ProfileAvatar } from "../../../../components/profile-avatar.component";
+import { useAuth, useNavigation } from "../../../../hooks";
+import { IPropertyProsSignUpItemProps } from "../../../../interface/interfaces";
 import { themedStyles as theme } from "../../../styles";
+import { KeyboardAvoidingView } from "../../extra/3rd-party";
 
 const SignUpStep: FunctionComponent<IPropertyProsSignUpItemProps> = ({
   title,
   description,
-  children,
+  children
 }): ReactElement => {
   const styles = useStyleSheet({ ...themedStyles, ...theme });
   const { openSignInScreen } = useNavigation();
-  const wizard = useWizard();
+  // const wizard = useWizard();
   const dimensions = useWindowDimensions();
   const windowHeight = dimensions.height;
   let headerHeight = windowHeight / 2;
   let header: any = useRef(null);
 
-  const {
-    isLastStep,
-    handleStep,
-  } = useWizard();
+  const wizard = useWizard();
+  const { signUp } = useAuth();
 
+  const { isLastStep } = wizard;
   // This handler is optional
-  handleStep(() => {
+  const handleNextStep = () => {
     if (isLastStep) {
-      
+      return signUp();
     }
-  });
+
+    return wizard.nextStep();
+  };
 
   return (
     <KeyboardAvoidingView style={styles.mainContentContainer}>
@@ -72,7 +72,7 @@ const SignUpStep: FunctionComponent<IPropertyProsSignUpItemProps> = ({
           style={styles.signInButton}
           onPress={async () => {
             await header?.current?.lightSpeedOut(500);
-            wizard.nextStep();
+            await handleNextStep();
           }}
           size="giant"
         >
@@ -83,7 +83,9 @@ const SignUpStep: FunctionComponent<IPropertyProsSignUpItemProps> = ({
             style={styles.forgotPasswordButton}
             appearance="ghost"
             status="basic"
-            onPress={openSignInScreen}
+            onPress={() => {
+              openSignInScreen();
+            }}
           >
             Already open an account? Sign In
           </Button>

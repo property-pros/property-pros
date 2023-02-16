@@ -1,13 +1,11 @@
 import {
   createSlice,
-  PayloadAction,
-  combineReducers,
-  ReducersMapObject,
+  PayloadAction
 } from "@reduxjs/toolkit";
 import {
   IPropertyProsSignInState,
   IPropertyProsSignUpState,
-  IPropertyProsSignupStateActions,
+  IPropertyProsSignupStateActions
 } from "../interface/interfaces";
 
 const initialState: IPropertyProsSignInState = {
@@ -46,7 +44,7 @@ const signUpInitialState: IPropertyProsSignUpState = {
   signUpSignature: false,
   signUpTaxFilingStatus: "",
   signUpHasServedAsPlaintiff: false,
-  signUpHasNotServedAsPlaintiff: true
+  signUpCommittedPrinciple: 0,
 };
 
 export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
@@ -109,6 +107,18 @@ export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
     action: PayloadAction<string>
   ) => {
     state.signUpTaxFilingStatus = action.payload;
+  },
+  setSignUpCommittedPrinciple: (
+    state: IPropertyProsSignUpState,
+    action: PayloadAction<number>
+  ) => {
+    state.signUpCommittedPrinciple = action.payload;
+  },
+  setSignUpHasServedAsPlaintiff: (
+    state: IPropertyProsSignUpState,
+    action: PayloadAction<boolean>
+  ) => {
+    state.signUpHasServedAsPlaintiff = action.payload;
   },
 };
 

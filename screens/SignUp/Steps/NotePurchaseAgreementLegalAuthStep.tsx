@@ -1,22 +1,13 @@
+import {
+  CheckBox, IndexPath, Input, Select,
+  SelectItem, StyleService, useStyleSheet
+} from "@ui-kitten/components";
 import { FunctionComponent, ReactElement } from "react";
 import { View } from "react-native";
-import {
-  StyleService,
-  Text,
-  useStyleSheet,
-  Input,
-  CheckBox,
-  Layout,
-  Select,
-  SelectItem,
-  IndexPath,
-} from "@ui-kitten/components";
-import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
-import SignUpStep from "./SignUpStep";
-import { themedStyles as theme } from "../../styles";
-import { ProfileAvatar } from "../../../components/profile-avatar.component";
 import { useAuth } from "../../../hooks";
-import { PersonIcon } from "../extra/icons";
+import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
+import { themedStyles as theme } from "../../styles";
+import SignUpStep from "./SignUpStep";
 
 const NotePurchaseAgreementStep: FunctionComponent<
   INotePurchaseAgreementStepProps
@@ -30,6 +21,8 @@ const NotePurchaseAgreementStep: FunctionComponent<
     setSignUpSignature,
     signUpTaxFilingStatus,
     setSignUpTaxFilingStatus,
+    signUpCommittedPrinciple,
+    setSignUpCommittedPrinciple
   } = useAuth();
   return (
     <SignUpStep title="Note Purchase Agreement">
@@ -53,7 +46,7 @@ const NotePurchaseAgreementStep: FunctionComponent<
           style={styles.formItem}
         >
           {filingStatusOptions.map((it) => (
-            <SelectItem title={it} />
+            <SelectItem key={it} title={it} />
           ))}
         </Select>
 

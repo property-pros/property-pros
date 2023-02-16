@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useStore, useDispatch } from "react-redux";
-import functions from "../functions";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-native";
+import functions from "../functions";
 import { IPropertyProsNavigationHelper } from "../interface/interfaces";
 
 export default (): IPropertyProsNavigationHelper => {
@@ -15,6 +14,7 @@ export default (): IPropertyProsNavigationHelper => {
     openSignInScreen: functions.openSignInScreen,
     openSignUpScreen: functions.openSignUpScreen,
     openDashboardScreen: functions.openDashboardScreen,
+    openStatementScreen: functions.openStatementScreen,
     setChangeRoute: functions.setChangeRoute,
   };
 

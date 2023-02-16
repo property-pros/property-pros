@@ -17,7 +17,7 @@ export default (): IPropertyProsSignInState &
 
   return {
     signIn: functions.signIn,
-    setSigninEmail: functions.setSigninEmail,
+    setSignInEmail: functions.setSignInEmail,
     setSigninPassword: functions.setSigninPassword,
     signUp: functions.signUp,
     setSignUpEmail: functions.setSignUpEmail,

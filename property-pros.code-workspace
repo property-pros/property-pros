@@ -20,5 +20,8 @@
 			"path": "../property-pros-sdk"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"go.buildOnSave": "workspace",
+		"go.lintOnSave": "workspace"
+	}
 }

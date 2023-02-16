@@ -1,6 +1,6 @@
-import cmds from "../cmds";
 import { routes } from "../../constants";
-import { composeWithDevTools } from "@reduxjs/toolkit/dist/devtoolsExtension";
+import { IPropertyProsNavigationFunctions } from "../../interface/IPropertyProsFunctions";
+import cmds from "../cmds";
 
 function* navigate(path: string) {
   yield cmds.navigate(path);
@@ -17,4 +17,7 @@ export default {
   *openDashboardScreen() {
     yield cmds.call(navigate, routes.DASHBOARD);
   },
-} as IPropertyProsFunctions;
+  *openStatementScreen() {
+    yield cmds.call(navigate, routes.STATEMENT_VIEW_ROUTE);
+  },
+} as IPropertyProsNavigationFunctions;

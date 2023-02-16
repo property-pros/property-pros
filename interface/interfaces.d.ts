@@ -1,4 +1,7 @@
-import { PropsWithChildren, ReactChildren, ReactNode } from "react";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { ReactNode } from "react";
+import { WizardValues } from "react-use-wizard";
+import { IPropertyProsNavigationFunctions } from "./IPropertyProsFunctions";
 
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
@@ -20,6 +23,7 @@ interface IPropertyProsSignUpState {
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
   signUpHasNotServedAsPlaintiff: boolean;
+  signUpCommittedPrinciple: number;
 }
 
 interface IPropertyProsSignInState {
@@ -60,39 +64,30 @@ interface IPropertyProsSignupStateActions {
     state: IPropertyProsSignUpState,
     action: PayloadAction<string>
   ): void;
+  setSignUpCommittedPrinciple(
+    state: IPropertyProsSignUpState,
+    action: PayloadAction<number>
+  ): void;
   setSignUpDate(
     state: IPropertyProsSignUpState,
     action: PayloadAction<string>
   ): void;
   setSignUpSignature(
     state: IPropertyProsSignUpState,
-    action: PayloadAction<string>
+    action: PayloadAction<bool>
   ): void;
   setSignUpPassword(
     state: IPropertyProsSignUpState,
     action: PayloadAction<string>
   ): void;
-}
-
-interface IPropertyProsEffectCommands {
-  call(fn: Function, ...args: any[]): Generator;
-  reduxGetState(statePath?: string): Generator<unknown, EffectCommand, unknown>;
-  state: {
-    navigate(path: string): EffectCommand;
-  };
-  navigate(path: string): EffectCommand;
-  initNavigation(config: IPropertyProsFunctionsInitConfig): void;
-  getNotePurchaseAgreementDoc(): GetNotePurchaseAgreementDocResponse;
-}
-
-interface IPropertyProsFunctionsInitConfig {
-  navigation: NavigateFunction;
-}
-
-interface EffectCommand {
-  type: "callFn";
-  fn: Function;
-  args: []; // the arguments passed to get
+  setSignUpTaxFilingStatus(
+    state: IPropertyProsSignUpState,
+    action: PayloadAction<string>
+  ): void;
+  setSignUpHasServedAsPlaintiff(
+    state: IPropertyProsSignUpState,
+    action: PayloadAction<boolean>
+  ): void;
 }
 
 interface YieldCommandResult {
@@ -110,9 +105,7 @@ interface INavigationState {
 }
 
 interface IPropertyProsNavigationHelper
-  extends IPropertyProsNavigationFunctions {
-  navigate: (string) => void;
-}
+  extends IPropertyProsNavigationFunctions {}
 
 interface IPropertyProsIntroQualificationProps {}
 interface IPropertyProsIntroEarningsProps {}

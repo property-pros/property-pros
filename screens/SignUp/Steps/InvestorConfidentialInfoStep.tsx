@@ -30,6 +30,8 @@ IInvestorConfidentialInfoStep
     setSignUpSignature,
     signUpTaxFilingStatus,
     setSignUpTaxFilingStatus,
+    signUpCommittedPrinciple,
+    setSignUpCommittedPrinciple
   } = useAuth();
   return (
     <SignUpStep title="Note Purchase Agreement">

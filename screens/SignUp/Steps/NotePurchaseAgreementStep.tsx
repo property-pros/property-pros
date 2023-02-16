@@ -1,21 +1,14 @@
+import {
+  CheckBox, Input, Select,
+  SelectItem, StyleService, useStyleSheet
+} from "@ui-kitten/components";
 import { FunctionComponent, ReactElement } from "react";
 import { View } from "react-native";
-import {
-  StyleService,
-  Text,
-  useStyleSheet,
-  Input,
-  CheckBox,
-  Layout,
-  Select,
-  SelectItem,
-} from "@ui-kitten/components";
-import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
-import SignUpStep from "./SignUpStep";
-import { themedStyles as theme } from "../../styles";
-import { ProfileAvatar } from "../../../components/profile-avatar.component";
 import { useAuth } from "../../../hooks";
+import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
+import { themedStyles as theme } from "../../styles";
 import { PersonIcon } from "../extra/icons";
+import SignUpStep from "./SignUpStep";
 
 const NotePurchaseAgreementStep: FunctionComponent<
   INotePurchaseAgreementStepProps
@@ -115,11 +108,11 @@ const NotePurchaseAgreementStep: FunctionComponent<
           value={signUpTaxFilingStatus}
           onSelect={setSignUpEmail}
         >
-          <SelectItem>Single</SelectItem>
-          <SelectItem>Married filing jointly</SelectItem>
-          <SelectItem>Married filing separately</SelectItem>
-          <SelectItem>Head of household</SelectItem>
-          <SelectItem>Qualifying widow(er) with dependent child.</SelectItem>
+          <SelectItem key="single">Single</SelectItem>
+          <SelectItem key="married-filing-jointly">Married filing jointly</SelectItem>
+          <SelectItem key="married-filing-separately">Married filing separately</SelectItem>
+          <SelectItem key="head-of-household">Head of household</SelectItem>
+          <SelectItem key="qualifying-widower">Qualifying widow(er) with dependent child.</SelectItem>
         </Select>
         <Input
           placeholder="Tax Filing Status"

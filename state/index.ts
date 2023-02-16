@@ -6,12 +6,14 @@ import {
   signupActions,
 } from "./auth";
 
+const authActions = {...signinActions, ...signupActions}
 // Action creators are generated for each case reducer function
 export const actions = {
-  ...signinActions,
-  ...signupActions,
+  ...authActions,
   ...navigationActions,
 };
+
+export type AuthActions = typeof authActions
 
 export const reducers = {
   signIn: signInReducer,

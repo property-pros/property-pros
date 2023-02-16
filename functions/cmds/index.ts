@@ -1,8 +1,8 @@
-import { actions } from "../../state";
+import { cmds, IEffectsAsDataCommands } from "effects-as-data";
 import { generateCmdsFromActions, redux } from "effects-as-data-redux";
-import { cmds } from "effects-as-data";
-import { IPropertyProsEffectCommands } from "../../interface/interfaces";
-import { CommandDefinitions, MapHandlerMethods } from "../handlers";
+import { IPropertyProsEffectCommands } from "../../interface/IPropertyProsEffectsCommands";
+import { actions } from "../../state";
+import { MapHandlerMethods, NotePurchaseAgreementClient } from "../handlers";
 
 const reduxCmds = generateCmdsFromActions(actions);
 // combine and export universal cmds and the redux cmds generated above
@@ -11,11 +11,10 @@ export default {
   ...cmds,
   ...redux,
   ...MapHandlerMethods((methodName) => (payload: any) => {
-    console.log("methodName: ", methodName);
-    console.log("payload: ", payload);
+    
     return {
       type: methodName,
-      payload: { payload },
+      payload: payload,
     };
   }),
   state: reduxCmds,
@@ -28,4 +27,4 @@ export default {
       path,
     };
   },
-} as IPropertyProsEffectCommands;
+} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient ;
