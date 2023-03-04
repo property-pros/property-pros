@@ -2,7 +2,6 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { StatusBar } from "expo-status-bar";
-import 'node-libs-react-native/globals';
 import { Provider } from "react-redux";
 import { Layout } from "./components/layout/Layout";
 import "./globals";

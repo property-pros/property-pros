@@ -7,9 +7,12 @@ import { } from "react-router";
 import { NativeRouter, Navigate, Route, Routes } from "react-router-native";
 import NotePurchaseAgreementViewer from "../components/NotePurchaseAgreementViewer";
 import {
-  DASHBOARD_ROUTE, NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE, SIGN_IN_ROUTE,
+  DASHBOARD_ROUTE,
+  NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE,
+  SIGN_IN_ROUTE,
   SIGN_UP_ROUTE,
   STATEMENT_VIEW_ROUTE,
+  TRANSACTIONS_VIEW_ROUTE,
   WELCOME_INTRO_ROUTE
 } from "../constants/Routes";
 import Dashboard from "../screens/Dashboard";
@@ -17,13 +20,18 @@ import ScreenWrapper from "../screens/ScreenWrapper";
 import Login from "../screens/SignIn";
 import Register from "../screens/SignUp";
 import Statement from "../screens/Statement";
+import Transactions from "../screens/Transactions";
 import WelcomeIntro from "../screens/WelcomeIntro";
 
 export default function navigation() {
   return (
     <NativeRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={SIGN_IN_ROUTE} />} />
+        <Route path="/" element={<Navigate to={TRANSACTIONS_VIEW_ROUTE} />} />
+        <Route
+          path={TRANSACTIONS_VIEW_ROUTE}
+          element={<ScreenWrapper component={Transactions} />}
+        />
         <Route
           path={SIGN_IN_ROUTE}
           element={<ScreenWrapper component={Login} />}

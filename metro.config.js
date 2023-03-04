@@ -30,7 +30,7 @@ module.exports = {
       },
     }),
 
-    sourceExts: ["js", "json", "ts", "tsx", "cjs"],
+    sourceExts: ["js", "json", "ts", "tsx", "cjs", "jsx"],
   },
   watchFolders,
 };
