@@ -8,13 +8,12 @@ import React from "react";
 //   LinkSuccess,
 //   LinkSuccessListener
 // } from "react-native-plaid-link-sdk";
-import PlaidLink from "expo-plaid-link";
 import { View } from "../../components/Themed";
 import useTransactions from "../../hooks/useTransactions";
 
 const Transactions: React.FC = () => {
   // useTransactions hook
-  const { linkToken, onLinkSuccess, loading, error } = useTransactions();
+  const { TransactionLink, token, onLinkSuccess, loading, error } = useTransactions();
 
   // Define a handler function that receives the link success data
   const handleSuccess = onLinkSuccess
@@ -49,14 +48,14 @@ const Transactions: React.FC = () => {
       {error ? (
         <Text>{error?.toString()}</Text>
       ) : (
-        <PlaidLink
+        <TransactionLink
           onSuccess={handleSuccess}
           onExit={handleExit}
           onEvent={handleEvent}
-          linkToken={linkToken}
+          linkToken={token}
         >
           <Text>Connect your bank account</Text>
-        </PlaidLink>
+        </TransactionLink>
       )}
     </>
   );

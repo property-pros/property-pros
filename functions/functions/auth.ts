@@ -50,6 +50,9 @@ export default {
         },
       },
     });
+
+    yield cmds.set
+
     yield cmds.navigate(routes.DASHBOARD_ROUTE);
   },
 };

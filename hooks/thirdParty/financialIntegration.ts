@@ -1,4 +1,11 @@
-import { Configuration, PlaidApi, PlaidEnvironments } from "plaid";
+import {
+  Configuration,
+  PlaidApi,
+  PlaidEnvironments,
+  type Transaction as PlaidTransaction
+} from "plaid";
+export { default as TransactionLinkComponent } from "@burstware/expo-plaid-link";
+export type Transaction = PlaidTransaction;
 
 const configuration = new Configuration({
   basePath: PlaidEnvironments.sandbox,
@@ -36,15 +43,18 @@ export async function getLinkToken() {
 
 // Function to exchange a public_token for an access_token
 export async function exchangePublicToken(public_token) {
-
   const response = await client.itemPublicTokenExchange({
     public_token,
   });
-  return response.data.access_token;
+
+  return {
+    accessToken: response.data.access_token,
+    itemId: response.data.item_id,
+  };
 }
 
 // Function to fetch transactions for an Item
-export async function getTransactions(accessToken, startDate, endDate) {
+export async function getTransactions(accessToken: string, startDate?: string, endDate?: string) {
   const response = await client.transactionsGet({
     access_token: accessToken,
     start_date: startDate,
