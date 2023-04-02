@@ -5,6 +5,11 @@ import {
   IPropertyProsSignUpState,
   IPropertyProsState,
 } from "../interface/interfaces";
+
+import {
+  IPropertyProsSignUpFunctions,
+  IPropertyProseSignInFunctions
+} from "../interface/IPropertyProsFunctions"
 import { AnyAction, Store } from "@reduxjs/toolkit";
 
 export default (): IPropertyProsSignInState &
@@ -18,7 +23,7 @@ export default (): IPropertyProsSignInState &
   return {
     signIn: functions.signIn,
     setSignInEmail: functions.setSignInEmail,
-    setSigninPassword: functions.setSigninPassword,
+    setSignInPassword: functions.setSignInPassword,
     signUp: functions.signUp,
     setSignUpEmail: functions.setSignUpEmail,
     setSignUpPassword: functions.setSignUpPassword,

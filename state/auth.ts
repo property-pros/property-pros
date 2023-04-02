@@ -20,6 +20,13 @@ export const reducerFunctions = {
   ) => {
     state.signInEmail = action.payload;
   },
+  setSignInPassword: (
+    state: IPropertyProsSignInState,
+    action: PayloadAction<string>
+  ) => {
+    state.signInPassword = action.payload;
+  },
+  
 };
 
 export const signIn = createSlice({

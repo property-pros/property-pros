@@ -23,8 +23,8 @@ const SignInScreen: FunctionComponent<
 
   const {
     signIn,
-    setSigninPassword,
-     setSignInEmail,
+    setSignInPassword,
+    setSignInEmail,
     signInEmail,
     signInPassword,
   } = useAuth();
@@ -70,8 +70,10 @@ const SignInScreen: FunctionComponent<
           accessoryRight={renderPasswordIcon}
           value={signInPassword}
           secureTextEntry={!passwordVisible}
-          onChangeText={setSigninPassword}
+          onChangeText={setSignInPassword}
         />
+
+
         <View style={styles.forgotPasswordContainer}>
           <Button
             style={styles.forgotPasswordButton}

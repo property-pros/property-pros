@@ -27,7 +27,7 @@ interface IPropertyProsNotePurchaseAgreementFunctions {
 interface IPropertyProseSignInFunctions {
   signIn(): Promise<void> | Generator<never, void, unknown>;
   setSignInEmail(): Promise<void> | Generator<never, void, unknown>;
-  setSigninPassword(): Promise<void> | Generator<never, void, unknown>;
+  setSignInPassword(): Promise<void> | Generator<never, void, unknown>;
 }
 
 interface IPropertyProsSignUpFunctions {
