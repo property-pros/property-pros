@@ -18,6 +18,12 @@
 		},
 		{
 			"path": "../property-pros-sdk"
+		},
+		{
+			"path": "../expo-plaid-link"
+		},
+		{
+			"path": "../rn-pdf-reader-js"
 		}
 	],
 	"settings": {

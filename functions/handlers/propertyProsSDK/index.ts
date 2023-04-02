@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 import { CallOptions } from "nice-grpc-common";
 import { createChannel, createClient } from "nice-grpc-web";
-import { auth, notePurchaseAgreement } from "property-pros-sdk";
+import { auth, finance, notePurchaseAgreement } from "property-pros-sdk";
 
 // Do this first, before you make any grpc requests!
 grpc.setDefaultTransport(NodeHttpTransport());
@@ -40,7 +40,6 @@ type GetNotePurchaseAgreementDocRequest =
 export type GetNotePurchaseAgreementDocResponse =
   notePurchaseAgreement.GetNotePurchaseAgreementDocResponse;
 
-
 //auth exports
 const {
   AuthenticationServiceDefinition,
@@ -60,6 +59,7 @@ type SaveNotePurchaseAgreementResponse =
 export const typeDefinitions = {
   ...NotePurchaseAgreementServiceDefinition.methods,
   ...auth.AuthenticationServiceDefinition.methods,
+  ...finance.FinanceServiceDefinition.methods,
 };
 
 //notepurchaseagreement client setup
@@ -138,10 +138,66 @@ export function MapClientMethods(
   return client as NotePurchaseAgreementServiceClient & AuthClient;
 }
 
-const wrappers = {
-  "saveNotePurchaseAgreement": (payload: NotePurchaseAgreement): SaveNotePurchaseAgreementRequest => {
-    return {
-        notePurchaseAgreement: payload,
-    };
-  }
+//finance types
+type FinanceServiceClient = finance.FinanceServiceClient;
+type GetAccountRequest = finance.GetAccountRequest;
+type GetAccountResponse = finance.GetAccountResponse;
+type GetAccountsRequest = finance.GetAccountsRequest;
+type GetAccountsResponse = finance.GetAccountsResponse;
+type GetTransactionRequest = finance.GetTransactionRequest;
+type GetTransactionResponse = finance.GetTransactionResponse;
+type GetTransactionsRequest = finance.GetTransactionsRequest;
+type GetTransactionsResponse = finance.GetTransactionsResponse;
+type GetBalanceRequest = finance.GetBalanceRequest;
+type GetBalanceResponse = finance.GetBalanceResponse;
+type GetBalancesRequest = finance.GetBalancesRequest;
+type GetBalancesResponse = finance.GetBalancesResponse;
+
+type Account = finance.Account;
+type Transaction = finance.Transaction;
+type Balance = finance.Balance;
+type SaveFinancialItemRequest = finance.SaveFinancialItemRequest;
+
+type SaveFinancialItemResponse = finance.SaveFinancialItemResponse;
+
+//finance client
+
+//financeClient client setup
+export const financeClient = createClient(
+  finance.FinanceServiceDefinition,
+  channel
+) as finance.FinanceServiceClient;
+
+//finance interfaces
+export interface FinanceClient {
+  // getAccount<CallOptionsExt>(
+  //   request: DeepPartial<GetAccountRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetAccountResponse, unknown>;
+  // getAccounts<CallOptionsExt>(
+  //   request: DeepPartial<GetAccountsRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetAccountsResponse, unknown>;
+  // getBalance<CallOptionsExt>(
+  //   request: DeepPartial<GetBalanceRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetBalanceResponse, unknown>;
+  // getBalances<CallOptionsExt>(
+  //   request: DeepPartial<GetBalancesRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetBalancesResponse, unknown>;
+  // getTransaction<CallOptionsExt>(
+  //   request: DeepPartial<GetTransactionRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetTransactionResponse, unknown>;
+  // getTransactions<CallOptionsExt>(
+  //   request: DeepPartial<GetTransactionsRequest>,
+  //   options?: CallOptions & CallOptionsExt
+  // ): Generator<never, GetTransactionsResponse, unknown>;
+  saveFinancialItem<CallOptionsExt>(
+    request: DeepPartial<SaveFinancialItemRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Generator<never, SaveFinancialItemResponse, unknown>;
 }
+
+//TODO: move each client to separate file

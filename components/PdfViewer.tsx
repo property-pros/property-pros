@@ -1,5 +1,5 @@
-import PDFReader from "@hashiprobr/expo-pdf-reader";
 import { StyleSheet, Text } from "react-native";
+import PDFReader from "rn-pdf-reader-js";
 import { View } from "../components/Themed";
 
 export default function TabOneScreen({ doc, base64Conent }: any) {

@@ -4,7 +4,7 @@ import {
   PlaidEnvironments,
   type Transaction as PlaidTransaction
 } from "plaid";
-export { default as TransactionLinkComponent } from "@burstware/expo-plaid-link";
+export { default as TransactionLinkComponent } from "expo-plaid-link";
 export type Transaction = PlaidTransaction;
 
 const configuration = new Configuration({
