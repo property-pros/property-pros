@@ -1,15 +1,7 @@
 import cmds from "../cmds";
 import { Metadata } from "nice-grpc-common";
 import { Alert } from 'react-native';
-import { useDispatch } from "react-redux";
-
-
-
-
 import { reduxFunctions }  from "../";
-
-
-
 import { routes } from "../../constants";
 import {
   IPropertyProsSignUpState,
@@ -22,9 +14,6 @@ import {
   AuthenticateUserResponse
 } from "property-pros-sdk/api/auth/v1/auth"
 import { NotePurchaseAgreementRecord } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
-import { actions } from "../../state";
-
-
 
 export default {
    *signIn() {

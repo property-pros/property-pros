@@ -7,7 +7,7 @@ import { Metadata } from "nice-grpc-common";
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
   signUp: IPropertyProsSignUpState;
-  auth: IPropertyProsAuthenticatedUserState;
+  authenticatedUser: IPropertyProsAuthenticatedUserState;
   navigation: INavigationState;
 }
 

@@ -22,7 +22,7 @@ export default (): IPropertyProsSignInState &
   IPropertyProsAuthenticatedUserFunctions => {
   const store: Store<IPropertyProsState, AnyAction> = useStore();
 
-  const { signUp: signUpState, signIn: signInState, auth: authState } = store.getState();
+  const { signUp: signUpState, signIn: signInState, authenticatedUser } = store.getState();
 
   return {
     setAuthenticated: functions.setAuthenticated,
@@ -45,6 +45,6 @@ export default (): IPropertyProsSignInState &
     setSignUpHasServedAsPlaintiff: functions.setSignUpHasServedAsPlaintiff,
     ...signUpState,
     ...signInState,
-    ...authState,// TODO if remove works
+    ...authenticatedUser,
   };
 };
