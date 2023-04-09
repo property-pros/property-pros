@@ -10,7 +10,7 @@ import { createStore, getStore } from "../state/store";
 // effects-as-data.  If your view only talks to effects-as-data,
 // and effects-as-data talk to Redux, you'll have a clean unidirectional
 // data-flow through the application.
-const reduxFunctions = generateFunctionsFromActions(reduxActions);
+export const reduxFunctions = generateFunctionsFromActions(reduxActions);
 
 // Combine functions from project and reduxFunctions generated above
 const allFunctions = {

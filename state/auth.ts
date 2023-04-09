@@ -2,7 +2,9 @@ import {
   createSlice,
   PayloadAction
 } from "@reduxjs/toolkit";
+import { Metadata } from "nice-grpc-common";
 import {
+  IPropertyProsAuthenticatedUserState,
   IPropertyProsSignInState,
   IPropertyProsSignUpState,
   IPropertyProsSignupStateActions
@@ -38,6 +40,36 @@ export const signIn = createSlice({
 export const signinActions = signIn.actions;
 
 export const signInReducer = signIn.reducer;
+
+const initialAuthState: IPropertyProsAuthenticatedUserState = {
+  isAuthenticated: false,
+}
+export const authReducerFunctions = {
+  setAuthenticated: (
+    state: IPropertyProsAuthenticatedUserState,
+    action: PayloadAction<boolean>
+  ) => {
+    state.isAuthenticated = action.payload;
+  },
+  setAuthMetadata: (
+    state: IPropertyProsAuthenticatedUserState,
+    action: PayloadAction<Metadata>
+  ) => {
+    state.metadata = action.payload;
+  },
+  
+};
+
+export const authenticatedUser = createSlice({
+  name: "authenticatedUser",
+  initialState,
+  reducers: authReducerFunctions as any,
+});
+
+export const authenticatedUserActions = authenticatedUser.actions;
+
+export const authenticatedUserReducer = authenticatedUser.reducer;
+
 
 const signUpInitialState: IPropertyProsSignUpState = {
   signUpAddress: "40942 Belleray Ave Murrieta CA 92562",

@@ -2,10 +2,12 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { ReactNode } from "react";
 import { WizardValues } from "react-use-wizard";
 import { IPropertyProsNavigationFunctions } from "./IPropertyProsFunctions";
+import { Metadata } from "nice-grpc-common";
 
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
   signUp: IPropertyProsSignUpState;
+  auth: IPropertyProsAuthenticatedUserState;
   navigation: INavigationState;
 }
 
@@ -28,7 +30,12 @@ interface IPropertyProsSignUpState {
 
 interface IPropertyProsSignInState {
   signInEmail: string;
-  signInPassword: string;
+  signInPassword: string;  
+}
+
+interface IPropertyProsAuthenticatedUserState {
+  isAuthenticated: boolean
+  metadata?: Metadata
 }
 
 interface IPropertyProsSignupStateActions {

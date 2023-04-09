@@ -4,6 +4,7 @@ import { IPropertyProsState } from "./interfaces";
 interface IPropertyProsFunctions
   extends IPropertyProsSignUpFunctions,
     IPropertyProseSignInFunctions,
+    IPropertyProsAuthenticatedUserFunctions,
     IPropertyProsNotePurchaseAgreementFunctions {
   navigate(path: string): Promise<void> | Generator<never, void, unknown>;
   setEmail(): Promise<void> | Generator<never, void, unknown>;
@@ -22,6 +23,11 @@ interface IPropertyProsFunctions
 
 interface IPropertyProsNotePurchaseAgreementFunctions {
   getNotePurchaseAgreementDoc(): Promise<Buffer> | Generator<never, Buffer, any>;
+}
+
+interface IPropertyProsAuthenticatedUserFunctions {
+  setAuthenticated(boolean): Promise<void> | Generator<never, void, unknown>;
+  setAuthMetadata(Metadata): Promise<void> | Generator<never, void, unknown>;
 }
 
 interface IPropertyProseSignInFunctions {

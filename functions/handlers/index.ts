@@ -2,6 +2,7 @@ import { Store } from "@reduxjs/toolkit";
 import { interpreters } from "effects-as-data";
 import { buildReduxHandlers } from "effects-as-data-redux";
 import {
+  authClient,
   MapClientMethods, notePurchaseAgreementDocClient,
   typeDefinitions
 } from "./propertyProsSDK";
@@ -20,6 +21,7 @@ export default (store: Store) => {
     ...buildReduxHandlers(store),
     ...interpreters,
     ...notePurchaseAgreementDocClient,
+    ...authClient,
     initNavigation({ navigation }: any) {
       navigate = navigation;
     },

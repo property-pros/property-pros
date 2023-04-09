@@ -27,4 +27,4 @@ export default {
       path,
     };
   },
-} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient ;
+} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient & AuthClient ;
