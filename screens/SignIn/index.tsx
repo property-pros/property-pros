@@ -59,6 +59,7 @@ const SignInScreen: FunctionComponent<
       </View>
       <Layout style={styles.formContainer} level="1">
         <Input
+          autoCapitalize="none"
           placeholder="Email"
           accessoryRight={PersonIcon as any}
           value={signInEmail}
