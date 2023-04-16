@@ -20,6 +20,8 @@ export const reducerFunctions = {
     state: IPropertyProsSignInState,
     action: PayloadAction<string>
   ) => {
+    console.log("hrere")
+    console.log(action.payload)
     state.signInEmail = action.payload;
   },
   setSignInPassword: (
@@ -62,7 +64,7 @@ export const authReducerFunctions = {
 
 export const authenticatedUser = createSlice({
   name: "authenticatedUser",
-  initialState,
+  initialState: initialAuthState,
   reducers: authReducerFunctions as any,
 });
 
@@ -73,7 +75,7 @@ export const authenticatedUserReducer = authenticatedUser.reducer;
 
 const signUpInitialState: IPropertyProsSignUpState = {
   signUpAddress: "40942 Belleray Ave Murrieta CA 92562",
-  signUpDate: new Date(Date.now()),
+  signUpDate: new Date(Date.now()).toISOString(),
   signUpEmail: "srt0422@yahoo.com",
   signUpLegalCellPhone: "9512493842",
   signUpLegalFirstName: "Scott",
@@ -97,7 +99,7 @@ export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
     state: IPropertyProsSignUpState,
     action: PayloadAction<string>
   ) => {
-    state.signUpDate = new Date(action.payload);
+    state.signUpDate = new Date(action.payload).toISOString();
   },
   setSignUpEmail: (
     state: IPropertyProsSignUpState,
@@ -163,7 +165,7 @@ export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
 
 export const signUp = createSlice({
   name: "signUp",
-  initialState,
+  initialState: signUpInitialState,
   reducers: signUpReducerFunctions as any,
 });
 

@@ -1,7 +1,7 @@
 import cmds from "../cmds";
 import { Metadata } from "nice-grpc-common";
 import { Alert } from 'react-native';
-import { reduxFunctions }  from "../";
+import { reduxFunctions }  from "../../state";
 import { routes } from "../../constants";
 import {
   IPropertyProsSignUpState,

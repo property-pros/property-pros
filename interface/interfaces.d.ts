@@ -21,10 +21,9 @@ interface IPropertyProsSignUpState {
   signUpAddress: string;
   signUpLegalSocialSecurityNumber: nubmer;
   signUpTaxFilingStatus: string;
-  signUpDate: Date;
+  signUpDate: string;
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
-  signUpHasNotServedAsPlaintiff: boolean;
   signUpCommittedPrinciple: number;
 }
 

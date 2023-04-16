@@ -141,7 +141,7 @@ export function MapClientMethods(
 const wrappers = {
   "saveNotePurchaseAgreement": (payload: NotePurchaseAgreement): SaveNotePurchaseAgreementRequest => {
     return {
-        notePurchaseAgreement: payload,
+        payload: payload,
     };
   }
 }

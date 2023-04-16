@@ -17,12 +17,12 @@ import { AnyAction, Store } from "@reduxjs/toolkit";
 export default (): IPropertyProsSignInState &
   IPropertyProsSignUpState &
   IPropertyProsAuthenticatedUserState &
+  IPropertyProsAuthenticatedUserFunctions &
   IPropertyProsSignUpFunctions &
-  IPropertyProseSignInFunctions &
-  IPropertyProsAuthenticatedUserFunctions => {
+  IPropertyProseSignInFunctions => {
   const store: Store<IPropertyProsState, AnyAction> = useStore();
 
-  const { signUp: signUpState, signIn: signInState, authenticatedUser } = store.getState();
+  const { signUp: signUpState, signIn: signInState, authenticatedUser: authenticatedUserState } = store.getState();
 
   return {
     setAuthenticated: functions.setAuthenticated,
@@ -45,6 +45,6 @@ export default (): IPropertyProsSignInState &
     setSignUpHasServedAsPlaintiff: functions.setSignUpHasServedAsPlaintiff,
     ...signUpState,
     ...signInState,
-    ...authenticatedUser,
+    ...authenticatedUserState,
   };
 };
