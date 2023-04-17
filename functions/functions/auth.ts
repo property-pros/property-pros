@@ -5,7 +5,7 @@ import { reduxFunctions }  from "../../state";
 import { routes } from "../../constants";
 import {
   IPropertyProsSignUpState,
-  IPropertyProsSignInState
+  IPropertyProsSignInState,
 } from "../../interface/interfaces";
 
 import { authClient, notePurchaseAgreementDocClient } from "../handlers/propertyProsSDK";
@@ -21,7 +21,7 @@ export default {
       signInEmail,
       signInPassword
     }: IPropertyProsSignInState =  yield cmds.reduxGetState("signIn")
-
+    console.log("signing the user in")
     let metadata = new Metadata({});
     let metadataResult: Metadata = new Metadata();
 
@@ -43,8 +43,9 @@ export default {
       return
     }
 
-    reduxFunctions.setAuthenticated(true);
-    reduxFunctions.setAuthMetadata(metadata);
+    let authtoken = metadataResult.get("authorization")!
+    var savedAuthenticated: void = yield cmds.call(reduxFunctions.setAuthenticated, true);
+    var savedAuthToken: void = yield cmds.call(reduxFunctions.setAuthToken, authtoken);
 
     yield cmds.navigate(routes.DASHBOARD_ROUTE);
   },

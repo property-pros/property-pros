@@ -26,7 +26,7 @@ export default (): IPropertyProsSignInState &
 
   return {
     setAuthenticated: functions.setAuthenticated,
-    setAuthMetadata: functions.setAuthMetadata,
+    setAuthToken: functions.setAuthToken,
     signIn: functions.signIn,
     setSignInEmail: functions.setSignInEmail,
     setSignInPassword: functions.setSignInPassword,
