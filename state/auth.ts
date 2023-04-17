@@ -2,7 +2,6 @@ import {
   createSlice,
   PayloadAction
 } from "@reduxjs/toolkit";
-import { Metadata } from "nice-grpc-common";
 import {
   IPropertyProsAuthenticatedUserState,
   IPropertyProsSignInState,
@@ -53,11 +52,11 @@ export const authReducerFunctions = {
   ) => {
     state.isAuthenticated = action.payload;
   },
-  setAuthMetadata: (
+  setAuthToken: (
     state: IPropertyProsAuthenticatedUserState,
-    action: PayloadAction<Metadata>
+    action: PayloadAction<string>
   ) => {
-    state.metadata = action.payload;
+    state.authToken = action.payload;
   },
   
 };

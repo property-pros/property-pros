@@ -1,8 +1,7 @@
 import { buildFunctions } from "effects-as-data/core";
-import { generateFunctionsFromActions } from "effects-as-data-redux";
 import buildHandlers from "./handlers";
 import functions from "./functions";
-import { actions as reduxActions, reduxFunctions } from "../state";
+import { reduxFunctions } from "../state";
 import { createStore, getStore } from "../state/store";
 
 

@@ -27,7 +27,7 @@ interface IPropertyProsNotePurchaseAgreementFunctions {
 
 interface IPropertyProsAuthenticatedUserFunctions {
   setAuthenticated(boolean): Promise<void> | Generator<never, void, unknown>;
-  setAuthMetadata(Metadata): Promise<void> | Generator<never, void, unknown>;
+  setAuthToken(Metadata): Promise<void> | Generator<never, void, unknown>;
 }
 
 interface IPropertyProseSignInFunctions {

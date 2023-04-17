@@ -34,7 +34,7 @@ interface IPropertyProsSignInState {
 
 interface IPropertyProsAuthenticatedUserState {
   isAuthenticated: boolean
-  metadata?: Metadata
+  authToken?: string
 }
 
 interface IPropertyProsSignupStateActions {
