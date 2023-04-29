@@ -20,4 +20,7 @@ export default {
   *openStatementScreen() {
     yield cmds.call(navigate, routes.STATEMENT_VIEW_ROUTE);
   },
+  *openAgreementScreen(agreemendId: string) {
+    yield cmds.call(navigate, `${routes.NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}/${agreemendId}`)
+  }
 } as IPropertyProsNavigationFunctions;

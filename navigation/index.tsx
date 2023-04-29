@@ -48,6 +48,10 @@ export default function navigation() {
           path={NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}
           element={<ScreenWrapper component={NotePurchaseAgreementViewer} />}
         />
+        <Route
+          path={`${NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}/:notePurchaseAgreementId`}
+          element={<ScreenWrapper component={NotePurchaseAgreementViewer} />}
+        />
         <Route path="*" element={<Navigate to={SIGN_IN_ROUTE} />} />
       </Routes>
     </NativeRouter>
