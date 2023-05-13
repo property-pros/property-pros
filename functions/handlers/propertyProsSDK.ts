@@ -80,17 +80,6 @@ export const authClient = createClient(
   channel
 ) as AuthenticationServiceClient;
 
-const clientMethods = MapClientMethods(
-  (methodKey: string) => (args: ClientParameters) => {
-    console.log("args: ", args);
-    return () => {
-      console.log(methodKey, ": ", args.payload);
-    };
-    //TODO: finish server integration, including auth
-    //return (notePurchaseAgreementDocClient as any)[methodKey](args.payload);
-  }
-);
-
 //notepurchaseagreement interfaces
 export interface NotePurchaseAgreementClient {
   getNotePurchaseAgreementDoc<CallOptionsExt>(
