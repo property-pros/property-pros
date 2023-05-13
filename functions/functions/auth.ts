@@ -1,18 +1,19 @@
-import cmds from "../cmds";
 import { Metadata } from "nice-grpc-common";
 import { Alert } from 'react-native';
-import { reduxFunctions }  from "../../state";
 import { routes } from "../../constants";
 import {
-  IPropertyProsSignUpState,
   IPropertyProsSignInState,
+  IPropertyProsSignUpState,
 } from "../../interface/interfaces";
+import { reduxFunctions } from "../../state";
+import cmds from "../cmds";
 
+//TODO: use cmds to decrease dependencies.
 import { authClient, notePurchaseAgreementDocClient } from "../handlers/propertyProsSDK";
 
 import {
   AuthenticateUserResponse
-} from "property-pros-sdk/api/auth/v1/auth"
+} from "property-pros-sdk/api/auth/v1/auth";
 import { NotePurchaseAgreementRecord } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
 
 export default {
