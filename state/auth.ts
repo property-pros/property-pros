@@ -71,7 +71,6 @@ export const authenticatedUserActions = authenticatedUser.actions;
 
 export const authenticatedUserReducer = authenticatedUser.reducer;
 
-
 const signUpInitialState: IPropertyProsSignUpState = {
   signUpAddress: "40942 Belleray Ave Murrieta CA 92562",
   signUpDate: new Date(Date.now()).toISOString(),
@@ -82,9 +81,9 @@ const signUpInitialState: IPropertyProsSignUpState = {
   signUpLegalSocialSecurityNumber: "123411234",
   signUpPassword: "testtest",
   signUpSignature: false,
-  signUpTaxFilingStatus: "",
+  signUpTaxFilingStatus: "Single",
   signUpHasServedAsPlaintiff: false,
-  signUpCommittedPrinciple: 0,
+  signUpCommittedPrinciple: "0",
 };
 
 export const signUpReducerFunctions: IPropertyProsSignupStateActions = {

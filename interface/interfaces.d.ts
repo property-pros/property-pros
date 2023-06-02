@@ -2,7 +2,6 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { ReactNode } from "react";
 import { WizardValues } from "react-use-wizard";
 import { IPropertyProsNavigationFunctions } from "./IPropertyProsFunctions";
-import { Metadata } from "nice-grpc-common";
 
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
@@ -24,7 +23,7 @@ interface IPropertyProsSignUpState {
   signUpDate: string;
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
-  signUpCommittedPrinciple: number;
+  signUpCommittedPrinciple: string;
 }
 
 interface IPropertyProsSignInState {

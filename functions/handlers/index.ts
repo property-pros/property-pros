@@ -3,8 +3,9 @@ import { interpreters } from "effects-as-data";
 import { buildReduxHandlers } from "effects-as-data-redux";
 import {
   authClient,
-  MapClientMethods, notePurchaseAgreementDocClient,
-  typeDefinitions
+  MapClientMethods,
+  notePurchaseAgreementDocClient,
+  typeDefinitions,
 } from "./propertyProsSDK";
 
 // export a function that takes a Redux store and builds all the handers
@@ -12,7 +13,7 @@ import {
 let navigate: any = null;
 
 export const CommandDefinitions = typeDefinitions;
-export const MapHandlerMethods = MapClientMethods
+export const MapHandlerMethods = MapClientMethods;
 
 export * from "./propertyProsSDK";
 

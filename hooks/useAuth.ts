@@ -1,5 +1,5 @@
-import functions from "../functions";
 import { useStore } from "react-redux";
+import functions from "../functions";
 import {
   IPropertyProsAuthenticatedUserState,
   IPropertyProsSignInState,
@@ -7,12 +7,12 @@ import {
   IPropertyProsState,
 } from "../interface/interfaces";
 
+import { AnyAction, Store } from "@reduxjs/toolkit";
 import {
   IPropertyProsAuthenticatedUserFunctions,
   IPropertyProsSignUpFunctions,
   IPropertyProseSignInFunctions
-} from "../interface/IPropertyProsFunctions"
-import { AnyAction, Store } from "@reduxjs/toolkit";
+} from "../interface/IPropertyProsFunctions";
 
 export default (): IPropertyProsSignInState &
   IPropertyProsSignUpState &
