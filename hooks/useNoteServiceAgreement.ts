@@ -6,5 +6,6 @@ export default (): IPropertyProsNotePurchaseAgreementFunctions => {
 
   return {
     getNotePurchaseAgreementDoc: functions.getNotePurchaseAgreementDoc,
+    getNotePurchaseAgreements: functions.getNotePurchaseAgreements,
   };
 };

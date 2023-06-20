@@ -15,6 +15,7 @@ export default (): IPropertyProsNavigationHelper => {
     openSignUpScreen: functions.openSignUpScreen,
     openDashboardScreen: functions.openDashboardScreen,
     openStatementScreen: functions.openStatementScreen,
+    openAgreementScreen: functions.openAgreementScreen,
     setChangeRoute: functions.setChangeRoute,
   };
 
