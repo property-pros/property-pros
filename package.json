@@ -13,7 +13,7 @@
   "dependencies": {
     "@eva-design/eva": "^2.1.1",
     "@expo/vector-icons": "^13.0.0",
-    "@expo/webpack-config": "~0.17.2",
+    "@expo/webpack-config": "~18.0.0",
     "@hashiprobr/expo-pdf-reader": "1.0.8",
     "@improbable-eng/grpc-web-node-http-transport": "^0.15.0",
     "@reduxjs/toolkit": "^1.8.0",
@@ -54,7 +54,7 @@
     "react-router-native": "^6.2.2",
     "react-use-wizard": "^2.1.2",
     "rn-pdf-reader-js": "^4.1.1",
-    "webpack-dev-server": "~3.11.0"
+    "webpack-dev-server": "~4.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
