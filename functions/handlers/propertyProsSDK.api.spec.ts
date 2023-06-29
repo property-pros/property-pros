@@ -98,8 +98,8 @@ describe("notePurchaseAgreements API integration test", function () {
       expect(agreementResult.payload?.fundsCommitted).toBe(npAgreementPayloadFixture.fundsCommitted)
   });
 
-
   it("should getNotePurchaseAgreements", async function() {
+
     let response: SaveNotePurchaseAgreementResponse = await notePurchaseAgreementDocClient.saveNotePurchaseAgreement({
       payload: {...npAgreementPayloadFixture, user:{
         emailAddress: emailAddress,
@@ -108,8 +108,7 @@ describe("notePurchaseAgreements API integration test", function () {
     })
 
     let metadata = await getAuthMetadata(emailAddress, npAgreementPayloadFixture.user.password)
-    let agreementResult =
-      await notePurchaseAgreementDocClient.getNotePurchaseAgreements(
+    let agreementResult = await notePurchaseAgreementDocClient.getNotePurchaseAgreements(
         {},
         { metadata }
       );
@@ -121,19 +120,18 @@ describe("notePurchaseAgreements API integration test", function () {
       expect(agreementResult.payload?.payload[0]?.createdOn).toBeDefined
   });
 
-  // it.skip("should getNotePurchaseAgreementDoc", async function () {
+  it("should getNotePurchaseAgreementDoc", async function() {
 
 
-  //   let agreementDocResult =
-  //     await notePurchaseAgreementDocClient.getNotePurchaseAgreementDoc(
-  //       {
-  //         payload: {},
-  //       },
-  //       { metadata }
-  //     );
-  //   console.log("agreementDocResult")
-  //   console.log(agreementDocResult)
-  //   expect(agreementDocResult.fileContent).not.toBeNull();
-  //   expect(agreementDocResult.fileContent.length).toBeGreaterThan(0);
-  // });
+      await notePurchaseAgreementDocClient.getNotePurchaseAgreementDoc(
+        {
+          payload: {
+            id: response.payload?.id
+          },
+        },
+        { metadata }
+      );
+
+      expect(agreementResult.fileContent).toBeDefined();
+  });
 });
