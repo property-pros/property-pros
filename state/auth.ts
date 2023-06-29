@@ -3,6 +3,7 @@ import {
   PayloadAction
 } from "@reduxjs/toolkit";
 import {
+  IPropertyProsAuthenticatedUserState,
   IPropertyProsSignInState,
   IPropertyProsSignUpState,
   IPropertyProsSignupStateActions
@@ -18,8 +19,17 @@ export const reducerFunctions = {
     state: IPropertyProsSignInState,
     action: PayloadAction<string>
   ) => {
+    console.log("hrere")
+    console.log(action.payload)
     state.signInEmail = action.payload;
   },
+  setSignInPassword: (
+    state: IPropertyProsSignInState,
+    action: PayloadAction<string>
+  ) => {
+    state.signInPassword = action.payload;
+  },
+  
 };
 
 export const signIn = createSlice({
@@ -32,9 +42,38 @@ export const signinActions = signIn.actions;
 
 export const signInReducer = signIn.reducer;
 
+const initialAuthState: IPropertyProsAuthenticatedUserState = {
+  isAuthenticated: false,
+}
+export const authReducerFunctions = {
+  setAuthenticated: (
+    state: IPropertyProsAuthenticatedUserState,
+    action: PayloadAction<boolean>
+  ) => {
+    state.isAuthenticated = action.payload;
+  },
+  setAuthToken: (
+    state: IPropertyProsAuthenticatedUserState,
+    action: PayloadAction<string>
+  ) => {
+    state.authToken = action.payload;
+  },
+  
+};
+
+export const authenticatedUser = createSlice({
+  name: "authenticatedUser",
+  initialState: initialAuthState,
+  reducers: authReducerFunctions as any,
+});
+
+export const authenticatedUserActions = authenticatedUser.actions;
+
+export const authenticatedUserReducer = authenticatedUser.reducer;
+
 const signUpInitialState: IPropertyProsSignUpState = {
   signUpAddress: "40942 Belleray Ave Murrieta CA 92562",
-  signUpDate: new Date(Date.now()),
+  signUpDate: new Date(Date.now()).toISOString(),
   signUpEmail: "srt0422@yahoo.com",
   signUpLegalCellPhone: "9512493842",
   signUpLegalFirstName: "Scott",
@@ -42,9 +81,9 @@ const signUpInitialState: IPropertyProsSignUpState = {
   signUpLegalSocialSecurityNumber: "123411234",
   signUpPassword: "testtest",
   signUpSignature: false,
-  signUpTaxFilingStatus: "",
+  signUpTaxFilingStatus: "Single",
   signUpHasServedAsPlaintiff: false,
-  signUpCommittedPrinciple: 0,
+  signUpCommittedPrinciple: "0",
 };
 
 export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
@@ -58,7 +97,7 @@ export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
     state: IPropertyProsSignUpState,
     action: PayloadAction<string>
   ) => {
-    state.signUpDate = new Date(action.payload);
+    state.signUpDate = new Date(action.payload).toISOString();
   },
   setSignUpEmail: (
     state: IPropertyProsSignUpState,
@@ -124,7 +163,7 @@ export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
 
 export const signUp = createSlice({
   name: "signUp",
-  initialState,
+  initialState: signUpInitialState,
   reducers: signUpReducerFunctions as any,
 });
 

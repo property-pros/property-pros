@@ -4,13 +4,16 @@ import { IPropertyProsState } from "./interfaces";
 interface IPropertyProsFunctions
   extends IPropertyProsSignUpFunctions,
     IPropertyProseSignInFunctions,
+    IPropertyProsAuthenticatedUserFunctions,
     IPropertyProsNotePurchaseAgreementFunctions {
   navigate(path: string): Promise<void> | Generator<never, void, unknown>;
   setEmail(): Promise<void> | Generator<never, void, unknown>;
   openSignInScreen(): Promise<void> | Generator<never, void, unknown>;
   openSignUpScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
+  openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
   openStatementScreen(): Promise<void> | Generator<never, void, unknown>;
+  openAgreementScreen(agreemendId): Promise<void> | Generator<never, void, unknown>;
   setChangeRoute(
     changeRoute: boolean
   ): Promise<void> | Generator<never, void, unknown>;
@@ -21,13 +24,20 @@ interface IPropertyProsFunctions
 }
 
 interface IPropertyProsNotePurchaseAgreementFunctions {
-  getNotePurchaseAgreementDoc(): Promise<Buffer> | Generator<never, Buffer, any>;
+  getNotePurchaseAgreementDoc(notePurchaseAgreementId: string): Promise<Buffer> | Generator<never, Buffer, any>;
+  getNotePurchaseAgreements(): Promise<sdk.GetNotePurchaseAgreementsResponse> | Generator<never, sdk.GetNotePurchaseAgreementsResponse, any>
+
+}
+
+interface IPropertyProsAuthenticatedUserFunctions {
+  setAuthenticated(boolean): Promise<void> | Generator<never, void, unknown>;
+  setAuthToken(Metadata): Promise<void> | Generator<never, void, unknown>;
 }
 
 interface IPropertyProseSignInFunctions {
   signIn(): Promise<void> | Generator<never, void, unknown>;
   setSignInEmail(): Promise<void> | Generator<never, void, unknown>;
-  setSigninPassword(): Promise<void> | Generator<never, void, unknown>;
+  setSignInPassword(): Promise<void> | Generator<never, void, unknown>;
 }
 
 interface IPropertyProsSignUpFunctions {
@@ -66,5 +76,6 @@ interface IPropertyProsNavigationFunctions {
   openSignUpScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
   openStatementScreen(): Promise<void> | Generator<never, void, unknown>;
+  openAgreementScreen(agreemendId: string): Promise<void> | Generator<never, void, unknown>;
   setChangeRoute(boolean): Promise<void> | Generator<never, void, unknown>;
 }

@@ -1,24 +1,35 @@
-import functions from "../functions";
 import { useStore } from "react-redux";
+import functions from "../functions";
 import {
+  IPropertyProsAuthenticatedUserState,
   IPropertyProsSignInState,
   IPropertyProsSignUpState,
   IPropertyProsState,
 } from "../interface/interfaces";
+
 import { AnyAction, Store } from "@reduxjs/toolkit";
+import {
+  IPropertyProsAuthenticatedUserFunctions,
+  IPropertyProsSignUpFunctions,
+  IPropertyProseSignInFunctions
+} from "../interface/IPropertyProsFunctions";
 
 export default (): IPropertyProsSignInState &
   IPropertyProsSignUpState &
+  IPropertyProsAuthenticatedUserState &
+  IPropertyProsAuthenticatedUserFunctions &
   IPropertyProsSignUpFunctions &
   IPropertyProseSignInFunctions => {
   const store: Store<IPropertyProsState, AnyAction> = useStore();
 
-  const { signUp: signUpState, signIn: signInState } = store.getState();
+  const { signUp: signUpState, signIn: signInState, authenticatedUser: authenticatedUserState } = store.getState();
 
   return {
+    setAuthenticated: functions.setAuthenticated,
+    setAuthToken: functions.setAuthToken,
     signIn: functions.signIn,
     setSignInEmail: functions.setSignInEmail,
-    setSigninPassword: functions.setSigninPassword,
+    setSignInPassword: functions.setSignInPassword,
     signUp: functions.signUp,
     setSignUpEmail: functions.setSignUpEmail,
     setSignUpPassword: functions.setSignUpPassword,
@@ -34,5 +45,6 @@ export default (): IPropertyProsSignInState &
     setSignUpHasServedAsPlaintiff: functions.setSignUpHasServedAsPlaintiff,
     ...signUpState,
     ...signInState,
+    ...authenticatedUserState,
   };
 };

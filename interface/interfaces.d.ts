@@ -6,6 +6,7 @@ import { IPropertyProsNavigationFunctions } from "./IPropertyProsFunctions";
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
   signUp: IPropertyProsSignUpState;
+  authenticatedUser: IPropertyProsAuthenticatedUserState;
   navigation: INavigationState;
 }
 
@@ -19,16 +20,20 @@ interface IPropertyProsSignUpState {
   signUpAddress: string;
   signUpLegalSocialSecurityNumber: nubmer;
   signUpTaxFilingStatus: string;
-  signUpDate: Date;
+  signUpDate: string;
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
-  signUpHasNotServedAsPlaintiff: boolean;
-  signUpCommittedPrinciple: number;
+  signUpCommittedPrinciple: string;
 }
 
 interface IPropertyProsSignInState {
   signInEmail: string;
-  signInPassword: string;
+  signInPassword: string;  
+}
+
+interface IPropertyProsAuthenticatedUserState {
+  isAuthenticated: boolean
+  authToken?: string
 }
 
 interface IPropertyProsSignupStateActions {

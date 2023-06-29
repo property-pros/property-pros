@@ -23,8 +23,8 @@ const SignInScreen: FunctionComponent<
 
   const {
     signIn,
-    setSigninPassword,
-     setSignInEmail,
+    setSignInPassword,
+    setSignInEmail,
     signInEmail,
     signInPassword,
   } = useAuth();
@@ -59,6 +59,7 @@ const SignInScreen: FunctionComponent<
       </View>
       <Layout style={styles.formContainer} level="1">
         <Input
+          autoCapitalize="none"
           placeholder="Email"
           accessoryRight={PersonIcon as any}
           value={signInEmail}
@@ -70,8 +71,10 @@ const SignInScreen: FunctionComponent<
           accessoryRight={renderPasswordIcon}
           value={signInPassword}
           secureTextEntry={!passwordVisible}
-          onChangeText={setSigninPassword}
+          onChangeText={setSignInPassword}
         />
+
+
         <View style={styles.forgotPasswordContainer}>
           <Button
             style={styles.forgotPasswordButton}

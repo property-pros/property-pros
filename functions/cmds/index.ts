@@ -10,11 +10,12 @@ const reduxCmds = generateCmdsFromActions(actions);
 export default {
   ...cmds,
   ...redux,
-  ...MapHandlerMethods((methodName) => (payload: any) => {
+  ...MapHandlerMethods((methodName) => (payload: any, options: any) => {
     
     return {
       type: methodName,
-      payload: payload,
+      payload,
+      options,
     };
   }),
   state: reduxCmds,
@@ -27,4 +28,4 @@ export default {
       path,
     };
   },
-} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient ;
+} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient & AuthClient ;
