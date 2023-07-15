@@ -5,7 +5,9 @@ interface IPropertyProsFunctions
   extends IPropertyProsSignUpFunctions,
     IPropertyProseSignInFunctions,
     IPropertyProsAuthenticatedUserFunctions,
-    IPropertyProsNotePurchaseAgreementFunctions {
+    IPropertyProsNotePurchaseAgreementFunctions,
+    IPropertyProsStatementFunctions,
+    IPropertyProsDocumentFunctions {
   navigate(path: string): Promise<void> | Generator<never, void, unknown>;
   setEmail(): Promise<void> | Generator<never, void, unknown>;
   openSignInScreen(): Promise<void> | Generator<never, void, unknown>;
@@ -13,7 +15,9 @@ interface IPropertyProsFunctions
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
   openStatementScreen(): Promise<void> | Generator<never, void, unknown>;
-  openAgreementScreen(agreemendId): Promise<void> | Generator<never, void, unknown>;
+  openAgreementScreen(
+    agreemendId
+  ): Promise<void> | Generator<never, void, unknown>;
   setChangeRoute(
     changeRoute: boolean
   ): Promise<void> | Generator<never, void, unknown>;
@@ -23,10 +27,19 @@ interface IPropertyProsFunctions
   init(config: any): Promise<void> | Generator<never, void, unknown>;
 }
 
-interface IPropertyProsNotePurchaseAgreementFunctions {
-  getNotePurchaseAgreementDoc(notePurchaseAgreementId: string): Promise<Buffer> | Generator<never, Buffer, any>;
-  getNotePurchaseAgreements(): Promise<sdk.GetNotePurchaseAgreementsResponse> | Generator<never, sdk.GetNotePurchaseAgreementsResponse, any>
+interface IPropertyProsDocumentFunctions {
+  getDocumentsList():
+    | Promise<documentItem[]>
+    | Generator<never, documentItem[], any>;
+}
 
+interface IPropertyProsNotePurchaseAgreementFunctions {
+  getNotePurchaseAgreementDoc(
+    notePurchaseAgreementId: string
+  ): Promise<Buffer> | Generator<never, Buffer, any>;
+  getNotePurchaseAgreements():
+    | Promise<sdk.GetNotePurchaseAgreementsResponse>
+    | Generator<never, sdk.GetNotePurchaseAgreementsResponse, any>;
 }
 
 interface IPropertyProsAuthenticatedUserFunctions {
@@ -76,6 +89,8 @@ interface IPropertyProsNavigationFunctions {
   openSignUpScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
   openStatementScreen(): Promise<void> | Generator<never, void, unknown>;
-  openAgreementScreen(agreemendId: string): Promise<void> | Generator<never, void, unknown>;
+  openAgreementScreen(
+    agreemendId: string
+  ): Promise<void> | Generator<never, void, unknown>;
   setChangeRoute(boolean): Promise<void> | Generator<never, void, unknown>;
 }

@@ -25,7 +25,7 @@ const NotePurchaseAgreementStep: FunctionComponent<
     setSignUpCommittedPrinciple
   } = useAuth();
   return (
-    <SignUpStep title="Note Purchase Agreement">
+    <SignUpStep title="Note Purchase Agreement" testID="signUpStep2">
       <View style={styles.formContainer}>
         <Input
           placeholder="Social"

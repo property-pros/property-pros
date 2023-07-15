@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Check if fastlane is installed
+if ! command -v fastlane &> /dev/null
+then
+    echo "Fastlane could not be found, installing it now..."
+
+    # Install fastlane using RubyGems
+    sudo gem install fastlane -NV
+
+    # Alternatively, if you're using a Mac and Homebrew
+    # brew install fastlane
+
+    # Verify that fastlane was successfully installed
+    if ! command -v fastlane &> /dev/null
+    then
+        echo "Failed to install fastlane. Please install it manually."
+        exit 1
+    else
+        echo "Fastlane successfully installed!"
+    fi
+else
+    echo "Fastlane is already installed."
+fi
+
+# Check if fastlane is in the PATH
+if echo "$PATH" | grep -q 'fastlane'
+then
+    echo "Fastlane is in the PATH."
+else
+    echo "Fastlane is not in the PATH. Updating the PATH..."
+
+    # Get the path of the fastlane installation
+    FASTLANE_PATH=$(gem which fastlane | sed -e "s/\/fastlane\.rb//g")
+
+    # Add fastlane to the PATH
+    echo 'export PATH="$PATH:'$FASTLANE_PATH'"' >> ~/.bash_profile
+
+    # Source the updated bash_profile to use the updated PATH
+    source ~/.bash_profile
+
+    echo "PATH updated with Fastlane!"
+fi

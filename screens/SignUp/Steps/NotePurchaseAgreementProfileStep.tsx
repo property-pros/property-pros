@@ -1,21 +1,15 @@
+import {
+  Input,
+  StyleService,
+  useStyleSheet
+} from "@ui-kitten/components";
 import { FunctionComponent, ReactElement } from "react";
 import { View } from "react-native";
-import {
-  StyleService,
-  Text,
-  useStyleSheet,
-  Input,
-  CheckBox,
-  Layout,
-  Select,
-  SelectItem,
-} from "@ui-kitten/components";
-import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
-import SignUpStep from "./SignUpStep";
-import { themedStyles as theme } from "../../styles";
-import { ProfileAvatar } from "../../../components/profile-avatar.component";
 import { useAuth } from "../../../hooks";
+import { INotePurchaseAgreementStepProps } from "../../../interface/interfaces";
+import { themedStyles as theme } from "../../styles";
 import { PersonIcon } from "../extra/icons";
+import SignUpStep from "./SignUpStep";
 
 const NotePurchaseAgreementProfileStep: FunctionComponent<
   INotePurchaseAgreementStepProps
@@ -40,7 +34,7 @@ const NotePurchaseAgreementProfileStep: FunctionComponent<
   } = useAuth();
 
   return (
-    <SignUpStep title="Note Purchase Agreement">
+    <SignUpStep title="Note Purchase Agreement" testID="signUpStep1">
       <View style={styles.formContainer}>
         <Input
           autoCapitalize="none"

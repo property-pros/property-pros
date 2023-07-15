@@ -2,7 +2,7 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
 import { CallOptions } from "nice-grpc-common";
 import { createChannel, createClient } from "nice-grpc-web";
-import { auth, notePurchaseAgreement } from "property-pros-sdk";
+import { auth, notePurchaseAgreement, statement } from "property-pros-sdk";
 
 // Do this first, before you make any grpc requests!
 grpc.setDefaultTransport(NodeHttpTransport());
@@ -39,7 +39,6 @@ type GetNotePurchaseAgreementDocRequest =
   notePurchaseAgreement.GetNotePurchaseAgreementDocRequest;
 export type GetNotePurchaseAgreementDocResponse =
   notePurchaseAgreement.GetNotePurchaseAgreementDocResponse;
-
 
 //auth exports
 const {
@@ -108,13 +107,39 @@ export interface AuthClient {
   ): Generator<never, AuthenticateUserResponse, unknown>;
 }
 
-interface ClientParameters {
-  payload: any;
-}
+const {
+  StatementServiceDefinition,
+  // GetStatementRequest,
+  // GetStatementResponse,
+  GetStatementsRequest,
+  GetStatementsResponse,
+  GetStatementDocRequest,
+  GetStatementDocResponse,
+  Statement,
+  // SaveStatementRequest,
+  // SaveStatementResponse,
+} = statement;
+
+//notepurchaseagreement types
+
+type StatementServiceClient = statement.StatementServiceClient;
+// type GetStatementRequest =
+//   statement.GetStatementRequest;
+// export type GetStatementResponse =
+//   statement.GetStatementResponse;
+type GetStatementsRequest = statement.GetStatementsRequest;
+export type GetStatementsResponse = statement.GetStatementsResponse;
+type GetStatementDocRequest = statement.GetStatementDocRequest;
+export type GetStatementDocResponse = statement.GetStatementDocResponse;
+
+export const statementClient = createClient(
+  StatementServiceDefinition,
+  channel
+) as StatementServiceClient;
 
 export function MapClientMethods(
   fn: (key: string) => Function
-): NotePurchaseAgreementServiceClient {
+): NotePurchaseAgreementServiceClient & AuthClient & StatementServiceClient {
   const methodNames: string[] = Object.keys(typeDefinitions) as any;
 
   let client: any = {};
@@ -124,13 +149,7 @@ export function MapClientMethods(
     client[it] = fn(it);
   }
 
-  return client as NotePurchaseAgreementServiceClient & AuthClient;
-}
-
-const wrappers = {
-  "saveNotePurchaseAgreement": (payload: NotePurchaseAgreement): SaveNotePurchaseAgreementRequest => {
-    return {
-        payload: payload,
-    };
-  }
+  return client as NotePurchaseAgreementServiceClient &
+    AuthClient &
+    StatementServiceClient;
 }

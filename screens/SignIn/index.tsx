@@ -1,20 +1,20 @@
-import React, { FunctionComponent, ReactElement } from "react";
-import { View, TouchableWithoutFeedback } from "react-native";
 import {
   Button,
+  Icon,
   Input,
   Layout,
   StyleService,
   Text,
   useStyleSheet,
-  Icon,
 } from "@ui-kitten/components";
-import { PersonIcon } from "./extra/icons";
-import { KeyboardAvoidingView } from "./extra/3rd-party";
-import { useNavigation, useAuth } from "../../hooks";
+import React, { FunctionComponent, ReactElement } from "react";
+import { TouchableWithoutFeedback, View } from "react-native";
+import { ProfileAvatar } from "../../components/profile-avatar.component";
+import { useAuth } from "../../hooks";
 import { RegistrationEntryLink } from "../../navigation/Links";
 import { themedStyles as theme } from "../styles";
-import { ProfileAvatar } from "../../components/profile-avatar.component";
+import { KeyboardAvoidingView } from "./extra/3rd-party";
+import { PersonIcon } from "./extra/icons";
 
 const SignInScreen: FunctionComponent<
   IPropertyProseSignInProps
@@ -46,7 +46,7 @@ const SignInScreen: FunctionComponent<
   );
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} testID="signIn">
       <View style={styles.headerContainer}>
         <ProfileAvatar
           style={styles.profileAvatar as any}
@@ -86,10 +86,10 @@ const SignInScreen: FunctionComponent<
           </Button>
         </View>
       </Layout>
-      <Button style={styles.signInButton} onPress={signIn} size="giant">
+      <Button style={styles.signInButton} onPress={signIn} size="giant" testID="signInButton">
         SIGN IN
       </Button>
-      <Button style={styles.signUpButton} appearance="ghost" status="basic">
+      <Button style={styles.signUpButton} appearance="ghost" status="basic" testID="signUpButton">
         <RegistrationEntryLink>
           <Text>Don't have an account? Create</Text>
         </RegistrationEntryLink>

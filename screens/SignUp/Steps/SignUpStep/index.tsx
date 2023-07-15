@@ -6,7 +6,7 @@ import {
   useStyleSheet
 } from "@ui-kitten/components";
 import { FunctionComponent, ReactElement, useRef } from "react";
-import { useWindowDimensions, View } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useWizard } from "react-use-wizard";
 import { ProfileAvatar } from "../../../../components/profile-avatar.component";
@@ -75,6 +75,7 @@ const SignUpStep: FunctionComponent<IPropertyProsSignUpItemProps> = ({
             await handleNextStep();
           }}
           size="giant"
+          testID="signUpContinueButton"
         >
           Continue
         </Button>

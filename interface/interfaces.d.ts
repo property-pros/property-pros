@@ -130,6 +130,7 @@ interface IPropertyProsSignUpItemProps {
   title: string;
   description?: ReactNode;
   children: ReactNode;
+  testID?: string;
 }
 
 interface INotePurchaseAgreementStepProps {}

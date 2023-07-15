@@ -14,6 +14,8 @@ const authActions = {...signinActions, ...signupActions, ...authenticatedUserAct
 export const actions = {
   ...authActions,
   ...navigationActions,
+  ...signinActions,
+  ...signupActions,
 };
 
 export type AuthActions = typeof authActions

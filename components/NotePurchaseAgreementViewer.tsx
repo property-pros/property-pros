@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-native"
 import * as SplashScreen from 'expo-splash-screen';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-native";
 
 import { default as PdfViewer } from "../components/PdfViewer";
-import useNoteServiceAgreement from "../hooks/useNoteServiceAgreement";
+import useNoteServiceAgreement from "../hooks/useNotePurchaseAgreement";
 import { View } from "./Themed";
 
 export default function NotePurchaseAgreementViewer({ navigation }: any) {

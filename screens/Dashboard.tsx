@@ -4,22 +4,24 @@ import {
   Icon,
   List,
   ListItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
-import { ComponentProps } from "react";
-import { useEffect, useState, useCallback } from "react";
+import { GetNotePurchaseAgreementsResponse } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
+import { ComponentProps, useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { LineChart, PieChart } from "../components/charts";
-import { useNavigation } from "../hooks";
-import useNoteServiceAgreement from "../hooks/useNoteServiceAgreement";
-import { GetNotePurchaseAgreementsResponse } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
+import {
+  useDocuments,
+  useNavigation,
+  useNotePurchaseAgreement,
+} from "../hooks";
 
-interface Data {
-  id? : string,
-  title: string,
-  description: string
+interface Documents {
+  id?: string;
+  title: string;
+  description: string;
 }
-const statements:Data[] = [
+const statements: Documents[] = [
   {
     title: "October 2022",
     description: "Interest Statement for October",
@@ -40,33 +42,39 @@ const statements:Data[] = [
 
 export default () => {
   const nav = useNavigation();
-  const { getNotePurchaseAgreements } = useNoteServiceAgreement();
-  const [npas, setNpas] = useState<Data[]>([]);
+  const { getNotePurchaseAgreements } = useNotePurchaseAgreement();
+  const { getDocumentsList } = useDocuments();
+  const [npas, setNpas] = useState<Documents[]>([]);
+  const [statements, setStatements] = useState<Documents[]>([]);
 
   const fetchAgreements = useCallback(async () => {
     try {
-      const agreements: GetNotePurchaseAgreementsResponse = await getNotePurchaseAgreements();
-      console.log("agreements are: ")
-      console.log(agreements)
-      let docs:Data[] = []
-      agreements.payload?.payload.map(agreement => {
-        let date = new Date(agreement.createdOn)
-        docs.push({
+      let docs: Documents[] = [];
+      const statementsList = await getDocumentsList();
+      console.log("statements are: ", statementsList);
+
+      const { payload }: GetNotePurchaseAgreementsResponse =
+        await getNotePurchaseAgreements();
+      console.log("agreements are: ");
+      console.log(payload);
+      const npaList = payload?.payload.map((agreement) => {
+        let date = new Date(agreement.createdOn);
+        return {
           id: agreement.id,
           title: `Note Purchase Agreement ${date.toLocaleDateString()}`,
-          description: "Note Purchase Agreement"
-        })
-      })
-      console.log("here")
-      console.log(docs)
-      setNpas(docs)
+          description: "Note Purchase Agreement",
+        };
+      });
+      console.log("here");
+      console.log(npaList);
+      setNpas(npaList);
     } catch (error) {
-      console.error("error fetching note purchase agreements for user ",error);
+      console.error("error fetching note purchase agreements for user ", error);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    fetchAgreements()
+    fetchAgreements();
   }, [fetchAgreements]);
 
   const renderStatementAccessory = (props: any) => (
@@ -75,23 +83,23 @@ export default () => {
     </Button>
   );
 
-  const renderNpaAccessory = (agreementId: string)  => {
+  const renderNpaAccessory = (agreementId: string) => {
     return (
       <Button size="tiny" onPress={() => nav.openAgreementScreen(agreementId)}>
         <Text>VIEW</Text>
       </Button>
     );
-  }
+  };
 
   const renderItemIcon = (props: any) => <Icon {...props} name="file" />;
-  const renderNpa = ({item, index}: any) => (
+  const renderNpa = ({ item, index }: any) => (
     <ListItem
-    title={`${item.title}`}
-    description={`${item.description}`}
-    accessoryLeft={renderItemIcon}
-    accessoryRight={()=> renderNpaAccessory(item.id)}
-  />
-  )
+      title={`${item.title}`}
+      description={`${item.description}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={() => renderNpaAccessory(item.id)}
+    />
+  );
   const renderStatement = ({ item, index }: any) => (
     <ListItem
       title={`${item.title}`}
