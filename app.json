@@ -15,12 +15,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "property-pros"
+      "bundleIdentifier": "com.propertypros.invest"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,7 +32,9 @@
     "extra": {
       "eas": {
         "projectId": "623af60a-79a8-4c53-870b-3de0cbb5fd30"
-      }
+      },
+      "PROPERTY_PROS_URL": "test",
+      "EXPO_USE_DEV_MENU": "false"
     }
   }
 }

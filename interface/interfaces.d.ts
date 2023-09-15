@@ -18,12 +18,12 @@ interface IPropertyProsSignUpState {
   signUpLegalCellPhone: string;
 
   signUpAddress: string;
-  signUpLegalSocialSecurityNumber: nubmer;
+  signUpLegalSocialSecurityNumber: string;
   signUpTaxFilingStatus: string;
   signUpDate: string;
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
-  signUpCommittedPrinciple: string;
+  signUpCommittedPrinciple: number;
 }
 
 interface IPropertyProsSignInState {

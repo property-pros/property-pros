@@ -1,37 +1,54 @@
-import * as Print from "expo-print";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
-import PdfViewer from "../components/PdfViewer";
+import { StyleSheet } from "react-native";
 
-const MyComponent = () => {
-  const [pdfUri, setPdfUri] = useState("");
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-native";
+
+import { default as PdfViewer } from "../components/PdfViewer";
+import useDocuments from "../hooks/useDocuments";
+import { View } from "../components/Themed";
+
+export default function StatementViewer({ navigation }: any) {
+  const { statementId } = useParams();
+  const [doc, setDoc] = useState<Buffer>();
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+
+  const functions = useDocuments();
 
   useEffect(() => {
-    try {
-      const html = `
-      <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-      </head>
-      <body style="text-align: center;">
-        <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-          Hello Expo!
-        </h1>
-      </body>
-    </html>
-      `;
-      Print.printToFileAsync({
-        html,
-        base64: true,
-      }).then(({ base64 }) => {
-        setPdfUri(base64!);
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    (async () => {
+      SplashScreen.preventAutoHideAsync();
+      if (!statementId) return;
+      const doc = (await functions.getStatementDoc(
+        statementId
+      )) as Buffer;
+
+      setDoc(doc);
+      setLoadingComplete(true);
+      await SplashScreen.hideAsync();
+    })();
   }, []);
 
-  return <View>{pdfUri != "" && <PdfViewer base64Conent={pdfUri} />}</View>;
-};
+  return (
+    <View style={{ flex: 1 }}>
+      {isLoadingComplete ? <PdfViewer doc={doc} /> : null}
+    </View>
+  );
+}
 
-export default MyComponent;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: "80%",
+  },
+});

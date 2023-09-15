@@ -1,19 +1,20 @@
 import PDFReader from "@hashiprobr/expo-pdf-reader";
 import { StyleSheet, Text } from "react-native";
 import { View } from "../components/Themed";
+import WebView from "react-native-webview";
 
-export default function TabOneScreen({ doc, base64Conent }: any) {
+export default function PdfViewer({ doc, base64Conent }: any) {
+console.log("getting base64 content");
   let content = base64Conent || doc?.toString("base64");
-
+  console.log("content is: ", content);
+  console.log("pdf viewer");
   return content != null && content != "" ? (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <PDFReader      
-          source={{            
-            base64: `data:application/pdf;base64,${content}`,
-          }}
-        />
-      </View>
+      <PDFReader
+        source={{
+          base64: `data:application/pdf;base64,${content}`,
+        }}
+      />
     </View>
   ) : (
     <View>

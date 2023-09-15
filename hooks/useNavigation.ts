@@ -4,13 +4,10 @@ import functions from "../functions";
 import { IPropertyProsNavigationHelper } from "../interface/interfaces";
 
 export default (): IPropertyProsNavigationHelper => {
-  const navigation = useNavigate();
-  useEffect(() => {
-    functions.init({ navigation });
-  }, []);
-  
+
   const navigationHelpers: IPropertyProsNavigationHelper = {
     navigate: functions.navigate,
+    goBack: functions.goBack,
     openSignInScreen: functions.openSignInScreen,
     openSignUpScreen: functions.openSignUpScreen,
     openDashboardScreen: functions.openDashboardScreen,

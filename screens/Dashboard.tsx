@@ -43,21 +43,21 @@ const statements: Documents[] = [
 export default () => {
   const nav = useNavigation();
   const { getNotePurchaseAgreements } = useNotePurchaseAgreement();
-  const { getDocumentsList } = useDocuments();
+  const { getUserDocumentsList: getDocumentsList } = useDocuments();
   const [npas, setNpas] = useState<Documents[]>([]);
   const [statements, setStatements] = useState<Documents[]>([]);
 
   const fetchAgreements = useCallback(async () => {
     try {
       let docs: Documents[] = [];
-      const statementsList = await getDocumentsList();
+      const { payload: statementsList } = await getDocumentsList();
       console.log("statements are: ", statementsList);
 
       const { payload }: GetNotePurchaseAgreementsResponse =
         await getNotePurchaseAgreements();
       console.log("agreements are: ");
       console.log(payload);
-      const npaList = payload?.payload.map((agreement) => {
+      const npaList = payload?.map((agreement) => {
         let date = new Date(agreement.createdOn);
         return {
           id: agreement.id,
@@ -68,6 +68,17 @@ export default () => {
       console.log("here");
       console.log(npaList);
       setNpas(npaList);
+
+      const statementItems = statementsList?.map((statement) => {
+        let date = new Date(statement.createdOn);
+        return {
+          id: statement.id,
+          title: `Statement ${date.toLocaleDateString()}`,
+          description: "Interest Statement",
+        };
+      });
+
+      setStatements(statementItems);
     } catch (error) {
       console.error("error fetching note purchase agreements for user ", error);
     }
@@ -77,8 +88,8 @@ export default () => {
     fetchAgreements();
   }, [fetchAgreements]);
 
-  const renderStatementAccessory = (props: any) => (
-    <Button size="tiny" onPress={() => nav.openStatementScreen()}>
+  const renderStatementAccessory = (statementId) => (
+    <Button size="tiny" onPress={() => nav.openStatementScreen(statementId)}>
       <Text>VIEW</Text>
     </Button>
   );
@@ -105,7 +116,7 @@ export default () => {
       title={`${item.title}`}
       description={`${item.description}`}
       accessoryLeft={renderItemIcon}
-      accessoryRight={renderStatementAccessory}
+      accessoryRight={()=> renderStatementAccessory(item.id)}
     />
   );
 

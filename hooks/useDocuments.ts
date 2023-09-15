@@ -5,6 +5,7 @@ import { IPropertyProsDocumentFunctions } from "../interface/IPropertyProsFuncti
 export default (): Partial<IPropertyProsDocumentFunctions> => {
 
   return {
-    getDocumentsList: functions.getDocumentsList
+    getUserDocumentsList: functions.getUserDocumentsList,
+    getStatementDoc: functions.getStatementDoc
   };
 };

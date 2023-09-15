@@ -5,8 +5,6 @@ import { createStore, getStore } from "../state/store";
 import functions from "./functions";
 import buildHandlers from "./handlers";
 
-
-
 // It is not necessary to generate these functions but is convenient
 // so that your application can talk to Redux indirectly through
 // effects-as-data.  If your view only talks to effects-as-data,

@@ -1,32 +1,37 @@
-import { testFn, args } from "effects-as-data/test";
+import { args, testFn } from "effects-as-data/test";
+import { Metadata } from "nice-grpc-common";
+import { AuthenticateUserResponse } from "property-pros-sdk/api/auth/v1/auth";
 import cmds from "../cmds";
-import fns  from "./notePurchaseAgreement";
+import fns, { authenticateUserOptions, metadataResult } from "./auth";
 
-const testGetNotePurchaseAgreementDoc = testFn(fns.getNotePurchaseAgreementDoc);
+const testSignin = testFn(fns.signIn);
 
 test(
-  "getNotePurchaseAgreementDoc() should return a list of random users",
-  testGetNotePurchaseAgreementDoc(() => {
-
-    const response = {
-      fileContent: "test"
+  "testSignin() should return a list of random users",
+  testSignin(() => {
+    const response: AuthenticateUserResponse = {
+      isAuthenticated: true,
+      errorMessage: "",
     };
+    let metadata = new Metadata({});
 
     return args()
-      .cmd(cmds.getNotePurchaseAgreementDoc({
-        payload: {
-          DateOfBirth: "12/21/1990",
-          EmailAddress: "test@test.com",
-          FirstName: "fugiat",
-          FundsCommitted: 378109,
-          HomeAddress: "est",
-          LastName: "dolor Duis",
-          PhoneNumber: "in",
-          SocialSecurity: "laboris elit incididunt commodo pariatur",
-        },
-      })) // yield cmd
-      .result(response) // const result = yield ...
-      .cmd(cmds.callFn(Buffer.from, response.fileContent))
-      .returns(null);
+      .cmd(cmds.reduxGetState("signIn"))
+      .result({
+        signInEmail: "testemail",
+        signInPassword: "testpassword",
+      })
+      .cmd(
+        cmds.authenticateUser(
+          {
+            payload: { emailAddress: "testemail", password: "testpassword" },
+          },
+          authenticateUserOptions
+        )
+      ) // yield cmd
+      .result(response)
+      .cmd(cmds.call(metadataResult.get, "authorization"))
+      .result(metadataResult)
+      .returns(undefined);
   })
 );

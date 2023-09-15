@@ -3,28 +3,33 @@ import { Alert } from "react-native";
 import { IPropertyProsAuthenticatedUserState } from "../../interface/interfaces";
 import cmds from "../cmds";
 
-export function* getUserDocumentsList() {
-  const { isAuthenticated, authToken }: IPropertyProsAuthenticatedUserState =
-    yield cmds.reduxGetState("authenticatedUser");
-  if (!isAuthenticated) {
-    Alert.alert("You are currently not signed in, please signin!");
-    return;
-  }
-
-  const metadata = new Metadata();
-
-  metadata.set("authorization", authToken);
-
-  const response = yield cmds.getStatements(
-    {
-      payload: {},
-    },
-    {
-      metadata,
+export default {
+  *getUserDocumentsList() {
+    const { isAuthenticated, authToken }: IPropertyProsAuthenticatedUserState =
+      yield cmds.reduxGetState("authenticatedUser");
+    if (!isAuthenticated) {
+      Alert.alert("You are currently not signed in, please signin!");
+      return;
     }
-  );
 
-  console.log("response: ", response);
+    const response = yield cmds.getStatements();
 
-  return response;
-}
+    console.log("statements response: ", response);
+
+    return response;
+  },
+  *getStatementDoc(statementId: any) {
+    const { isAuthenticated, authToken }: IPropertyProsAuthenticatedUserState =
+      yield cmds.reduxGetState("authenticatedUser");
+    if (!isAuthenticated) {
+      Alert.alert("You are currently not signed in, please signin!");
+      return;
+    }
+
+    const response = yield cmds.getStatementDoc({
+      id: statementId,
+    });
+
+    return yield cmds.callFn(Buffer.from, response.document, "base64");
+  },
+};

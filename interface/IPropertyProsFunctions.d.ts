@@ -8,6 +8,7 @@ interface IPropertyProsFunctions
     IPropertyProsNotePurchaseAgreementFunctions,
     IPropertyProsStatementFunctions,
     IPropertyProsDocumentFunctions {
+  goBack(): Promise<void> | Generator<never, void, unknown>;
   navigate(path: string): Promise<void> | Generator<never, void, unknown>;
   setEmail(): Promise<void> | Generator<never, void, unknown>;
   openSignInScreen(): Promise<void> | Generator<never, void, unknown>;
@@ -28,9 +29,10 @@ interface IPropertyProsFunctions
 }
 
 interface IPropertyProsDocumentFunctions {
-  getDocumentsList():
-    | Promise<documentItem[]>
-    | Generator<never, documentItem[], any>;
+  getUserDocumentsList():
+    | Promise<sdk.GetStatementsResponse>
+    | Generator<never, sdk.GetStatementsResponse, any>;
+  getStatementDoc(id: string): Promise<Buffer> | Generator<never, Buffer, any>;
 }
 
 interface IPropertyProsNotePurchaseAgreementFunctions {
@@ -85,6 +87,7 @@ interface IPropertyProsSignUpFunctions {
 
 interface IPropertyProsNavigationFunctions {
   navigate(path: string): Promise<void> | Generator<never, void, unknown>;
+  goBack(): Promise<void> | Generator<never, void, unknown>;
   openSignInScreen(): Promise<void> | Generator<never, void, unknown>;
   openSignUpScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;

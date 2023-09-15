@@ -7,7 +7,7 @@ import {
   Text,
   useStyleSheet,
 } from "@ui-kitten/components";
-import React, { FunctionComponent, ReactElement } from "react";
+import React, { FunctionComponent, ReactElement, useEffect } from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
 import { ProfileAvatar } from "../../components/profile-avatar.component";
 import { useAuth } from "../../hooks";
@@ -29,6 +29,18 @@ const SignInScreen: FunctionComponent<
     signInPassword,
   } = useAuth();
 
+  useEffect(() => {
+    async function test() {
+      await setSignInEmail("srt0422@yahoo.com");
+      await setSignInPassword("password");
+      await signIn();
+    }
+
+    // test().catch(function (err) {
+    //   console.log("sign in error: ", err, err.stack);
+    // });
+    return function () {};
+  }, []);
   const styles = useStyleSheet({ ...theme, ...themedStyles });
 
   const onForgotPasswordButtonPress = (): void => {
@@ -74,7 +86,6 @@ const SignInScreen: FunctionComponent<
           onChangeText={setSignInPassword}
         />
 
-
         <View style={styles.forgotPasswordContainer}>
           <Button
             style={styles.forgotPasswordButton}
@@ -86,10 +97,20 @@ const SignInScreen: FunctionComponent<
           </Button>
         </View>
       </Layout>
-      <Button style={styles.signInButton} onPress={signIn} size="giant" testID="signInButton">
+      <Button
+        style={styles.signInButton}
+        onPress={signIn}
+        size="giant"
+        testID="signInButton"
+      >
         SIGN IN
       </Button>
-      <Button style={styles.signUpButton} appearance="ghost" status="basic" testID="signUpButton">
+      <Button
+        style={styles.signUpButton}
+        appearance="ghost"
+        status="basic"
+        testID="signUpButton"
+      >
         <RegistrationEntryLink>
           <Text>Don't have an account? Create</Text>
         </RegistrationEntryLink>

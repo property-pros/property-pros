@@ -2,22 +2,24 @@ import { cmds, IEffectsAsDataCommands } from "effects-as-data";
 import { generateCmdsFromActions, redux } from "effects-as-data-redux";
 import { IPropertyProsEffectCommands } from "../../interface/IPropertyProsEffectsCommands";
 import { actions } from "../../state";
-import { MapHandlerMethods, NotePurchaseAgreementClient } from "../handlers";
+import { authClient, MapHandlerMethods, notePurchaseAgreementClient,  } from "../handlers";
 
 const reduxCmds = generateCmdsFromActions(actions);
 // combine and export universal cmds and the redux cmds generated above
 
+const handlerMethods = MapHandlerMethods((methodName) => (payload: any, options: any) => {
+    
+  return {
+    type: methodName,
+    payload,
+    options,
+  };
+});
+
 export default {
   ...cmds,
   ...redux,
-  ...MapHandlerMethods((methodName) => (payload: any, options: any) => {
-    
-    return {
-      type: methodName,
-      payload,
-      options,
-    };
-  }),
+  ...handlerMethods,
   state: reduxCmds,
   initNavigation(config: any) {
     return { type: "initNavigation", ...config };
@@ -28,4 +30,4 @@ export default {
       path,
     };
   },
-} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementClient & AuthClient ;
+} as IPropertyProsEffectCommands &  IEffectsAsDataCommands & NotePurchaseAgreementService & AuthService ;

@@ -1,14 +1,13 @@
 import { FunctionComponentElement } from "react";
 import { connect, ConnectedComponent } from "react-redux";
-import { useNavigation } from "../hooks";
+import { initNavigation } from "../hooks";
 
 export const ScreenWrapper = ({
   component: Component,
   ...props
 }: IScreenWrapperProps): FunctionComponentElement<IScreenWrapperProps> => {
   //ensures that navigation is initialized
-  useNavigation();
-  
+  initNavigation();
   return <Component {...props} />;
 };
 

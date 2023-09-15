@@ -8,6 +8,8 @@ interface IPropertyProsEffectCommands extends IEffectsAsDataCommands, NotePurcha
   state: {
     navigate(path: string): EffectCommand;
   };
+  setAuthenticated(boolean): EffectCommand;
+  setAuthToken(string): EffectCommand;
   navigate(path: string): EffectCommand;
   initNavigation(config: IPropertyProsFunctionsInitConfig): void;
 }
@@ -16,6 +18,14 @@ interface EffectCommand {
   type: "callFn";
   fn: Function;
   args: []; // the arguments passed to get
+}
+type HttpMethodName = "POST" | "GET" | "PUT" | "DELETE";
+
+interface IApiClientCommand {
+
+  type: HttpMethodName,
+  payload,
+  options,
 }
 
 interface IPropertyProsFunctionsInitConfig {

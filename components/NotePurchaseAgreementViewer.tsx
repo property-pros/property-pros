@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-native";
 
@@ -9,7 +9,7 @@ import useNoteServiceAgreement from "../hooks/useNotePurchaseAgreement";
 import { View } from "./Themed";
 
 export default function NotePurchaseAgreementViewer({ navigation }: any) {
-  const {notePurchaseAgreementId} = useParams()
+  const { notePurchaseAgreementId } = useParams();
   const [doc, setDoc] = useState<Buffer>();
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -18,21 +18,20 @@ export default function NotePurchaseAgreementViewer({ navigation }: any) {
   useEffect(() => {
     (async () => {
       SplashScreen.preventAutoHideAsync();
-      if (!notePurchaseAgreementId) return
-      const doc = (await functions.getNotePurchaseAgreementDoc(notePurchaseAgreementId)) as Buffer;
+      if (!notePurchaseAgreementId) return;
+      const doc = (await functions.getNotePurchaseAgreementDoc(
+        notePurchaseAgreementId
+      )) as Buffer;
 
       setDoc(doc);
       setLoadingComplete(true);
-      await SplashScreen.hideAsync()
+      await SplashScreen.hideAsync();
     })();
   }, []);
 
   return (
     <View style={{ flex: 1 }}>
-      {isLoadingComplete?
-      (<View style={{ flex: 1 }}>
-        <PdfViewer doc={doc} />
-      </View>): null}
+      {isLoadingComplete ? <PdfViewer doc={doc} /> : null}
     </View>
   );
 }

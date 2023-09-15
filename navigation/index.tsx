@@ -41,7 +41,7 @@ export default function navigation() {
           element={<ScreenWrapper component={Dashboard} />}
         />
         <Route
-          path={STATEMENT_VIEW_ROUTE}
+          path={`${STATEMENT_VIEW_ROUTE}/:statementId`}
           element={<ScreenWrapper component={Statement} />}
         />
         <Route

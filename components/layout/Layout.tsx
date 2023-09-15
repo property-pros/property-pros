@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactElement, ComponentProps } from "react";
-import { StyleSheet, ImageProps } from "react-native";
+import { StyleSheet, ImageProps, GestureResponderEvent } from "react-native";
 import {
   Divider,
   TopNavigation,
@@ -8,20 +8,37 @@ import {
 import { RenderProp } from "@ui-kitten/components/devsupport";
 import { SafeAreaLayout } from "./SafeAreaLayout";
 import { MenuGridList } from "../nav/MenuGridList";
-import { MenuIcon } from "../Icons";
+import { ArrowIosBackIcon, MenuIcon } from "../Icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+// import { useNavigate, useNavigation, useLocation } from "react-router-native";
+import useNavigation from "../../hooks/useNavigation";
 // import { data } from "./data";
 
-export const Layout: FunctionComponent = ({ children }) => {
-  // const onItemPress = (index: number): void => {
-  //   navigation.navigate(data[index].route);
-  // };
+export const Layout: FunctionComponent = (props) => {
+  const { children } = props;
+  console.log("props: ", Object.keys(props));
+  const navigation = useNavigation();
+
+  const onBackPress = (e: GestureResponderEvent): void => {
+    navigation.goBack();
+  };
 
   const renderDrawerAction = (): React.ReactElement => (
-    <TopNavigationAction
-      icon={MenuIcon as RenderProp<Partial<ImageProps>>}
-      // onPress={navigation.toggleDrawer}
-    />
+    <>
+      <TopNavigationAction
+        icon={MenuIcon as RenderProp<Partial<ImageProps>>}
+        // onPress={navigation.toggleDrawer}
+      />
+    </>
+  );
+
+  const renderBackAction = (): React.ReactElement => (
+    <>
+      <TopNavigationAction
+        icon={ArrowIosBackIcon as RenderProp<Partial<ImageProps>>}
+        onPress={onBackPress}
+      />
+    </>
   );
 
   return (
@@ -30,7 +47,8 @@ export const Layout: FunctionComponent = ({ children }) => {
         <SafeAreaLayout style={styles.safeArea} insets="top">
           <TopNavigation
             title="Property Pros"
-            accessoryLeft={renderDrawerAction}
+            accessoryLeft={renderBackAction}
+            accessoryRight={renderDrawerAction}
           />
           <Divider />
           {children}

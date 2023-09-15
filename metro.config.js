@@ -14,12 +14,11 @@ const extraNodeModules = {
   fontkit: fontkitPath,
 };
 
-const watchFolders = [
+const watchFolders = [ 
   // propertyProsSdkPath
 ];
 
 module.exports = (async () => {
-
   return {
     ...defaultConfig,
     transformer: {

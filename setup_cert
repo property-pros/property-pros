@@ -1,0 +1,54 @@
+#!/bin/zsh
+
+# Function to select fingerprint from a list
+select_fingerprint() {
+    echo "Please select a fingerprint:"
+    select fingerprint in "${fingerprint_list[@]}"; do
+        if [[ -n $fingerprint ]]; then
+            break
+        else
+            echo "Invalid selection"
+        fi
+    done
+}
+
+# Retrieve fingerprints and store them in an array
+fingerprint_list=("${(@f)$(security find-identity -v -p codesigning | grep -v '0 valid identities found' | awk -F \" '{print $2}')}")
+
+# Check if there are any fingerprints available
+if [ ${#fingerprint_list[@]} -eq 0 ]; then
+  echo "No fingerprints found. To find or generate a certificate:"
+  echo "1. Open Keychain Access on your Mac."
+  echo "2. In the Keychains list, select 'login'."
+  echo "3. In the Category list, select 'Certificates'."
+  echo "4. Look for a certificate that matches the one you need."
+  echo "5. If you can't find one, you may need to create a new certificate by using the 'Certificate Assistant' under the 'Keychain Access' menu."
+  exit 1
+fi
+
+# Call the function to select a fingerprint
+select_fingerprint
+
+# Print selected fingerprint
+echo "Selected fingerprint: $fingerprint"
+
+# Check if the fingerprint exists in the keychain
+if security find-certificate -c "$fingerprint" ; then
+  echo "Certificate exists in the keychain"
+else
+  echo "Certificate not found in the keychain"
+  read "import_choice?Would you like to import a certificate? (y/n): "
+
+  if [ "$import_choice" == "y" ] || [ "$import_choice" == "Y" ]; then
+    # Ask for the path to the .p12 file
+    read "p12_file?Enter the full path to the .p12 file: "
+
+    # Import the certificate
+    security import "$p12_file" -k ~/Library/Keychains/login.keychain-db
+  else
+    echo "Certificate not imported"
+  fi
+fi
+
+# Exit the script
+exit 0

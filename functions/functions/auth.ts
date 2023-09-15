@@ -1,52 +1,48 @@
-import { Metadata } from "nice-grpc-common";
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 import { routes } from "../../constants";
 import {
   IPropertyProsSignInState,
   IPropertyProsSignUpState,
 } from "../../interface/interfaces";
-import { reduxFunctions } from "../../state";
 import cmds from "../cmds";
-
 //TODO: use cmds to decrease dependencies.
-import { authClient, notePurchaseAgreementDocClient } from "../handlers/propertyProsSDK";
+import apiClient from "../handlers/propertyProsSDK";
+import { auth, notePurchaseAgreement } from "property-pros-sdk";
 
-import {
-  AuthenticateUserResponse
-} from "property-pros-sdk/api/auth/v1/auth";
-import { NotePurchaseAgreementRecord } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
+type AuthenticateUserResponse = auth.AuthenticateUserResponse;
+type NotePurchaseAgreementRecord =
+  notePurchaseAgreement.NotePurchaseAgreementRecord;
+let headerResult: any = null;
+
+const { NotePurchaseAgreementService: notePurchaseAgreementClient } = apiClient;
+
+export const authenticateUserOptions = {
+  onHeader(header: any) {
+    headerResult = header;
+  },
+};
 
 export default {
-   *signIn() {
-    const {
-      signInEmail,
-      signInPassword
-    }: IPropertyProsSignInState =  yield cmds.reduxGetState("signIn")
-    console.log("signing the user in")
-    let metadata = new Metadata({});
-    let metadataResult: Metadata = new Metadata();
+  *signIn() {
+    const { signInEmail, signInPassword }: IPropertyProsSignInState = yield cmds.reduxGetState("signIn");
 
     let authResult: AuthenticateUserResponse = {
       isAuthenticated: false,
-      errorMessage: ""
-    }
+      errorMessage: "",
+    };
     try {
-      authResult = yield cmds.callFn(authClient.authenticateUser, {
-        payload: { emailAddress: signInEmail, password: signInPassword }
-      }, {
-        metadata
-        ,onHeader(header:any) {
-          metadataResult = header;
+      authResult = yield cmds.authenticateUser(
+        {
+          payload: { emailAddress: signInEmail, password: signInPassword },
         },
-      })
-    } catch(err) {
-      Alert.alert("Login failed, please try again.")
-      return
+        authenticateUserOptions
+      );
+    } catch (err) {
+      throw err;
     }
 
-    let authtoken = metadataResult.get("authorization")!
-    var savedAuthenticated: void = yield cmds.call(reduxFunctions.setAuthenticated, true);
-    var savedAuthToken: void = yield cmds.call(reduxFunctions.setAuthToken, authtoken);
+    yield cmds.state.setAuthenticated(true);
+    yield cmds.state.setAuthToken(headerResult.authToken);
 
     yield cmds.navigate(routes.DASHBOARD_ROUTE);
   },
@@ -66,9 +62,10 @@ export default {
       signUpCommittedPrinciple,
     }: IPropertyProsSignUpState = yield cmds.reduxGetState("signUp");
 
-    let response:NotePurchaseAgreementRecord;
+    let response: NotePurchaseAgreementRecord;
     try {
-      response = yield cmds.callFn(notePurchaseAgreementDocClient.saveNotePurchaseAgreement, 
+      response = yield cmds.callFn(
+        notePurchaseAgreementClient.saveNotePurchaseAgreement,
         {
           payload: {
             fundsCommitted: signUpCommittedPrinciple,
@@ -81,13 +78,14 @@ export default {
             user: {
               emailAddress: signUpEmail,
               password: signUpPassword,
-            }}
-          
-        })
-      } catch(err) {
-        Alert.alert("Registration failed, Please try again!")
-        return
-      }
+            },
+          },
+        }
+      );
+    } catch (err) {
+      Alert.alert("Registration failed, Please try again!");
+      return;
+    }
 
     yield cmds.navigate(routes.SIGN_IN_ROUTE);
   },

@@ -2,64 +2,54 @@ import { notePurchaseAgreement as sdk } from "property-pros-sdk";
 import { IPropertyProsAuthenticatedUserState } from "../../interface/interfaces";
 import { IPropertyProsFunctions } from "../../interface/IPropertyProsFunctions";
 import cmds from "../cmds";
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 import { GetNotePurchaseAgreementsResponse } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
-import { notePurchaseAgreementDocClient } from "../handlers/propertyProsSDK";
+import { notePurchaseAgreementClient } from "../handlers/propertyProsSDK";
 import { Metadata } from "nice-grpc-common";
-
+import { routes } from "../../constants";
+import { UnauthenticatedError } from "../../errors";
 
 export default {
-  *getNotePurchaseAgreements(){
-    console.log("here in getNotePurchaseAgreements")
-    const {
-      isAuthenticated,
-      authToken
-    }: IPropertyProsAuthenticatedUserState = yield cmds.reduxGetState("authenticatedUser");
+  *getNotePurchaseAgreements() {
+    console.log("here in getNotePurchaseAgreements");
+    const { isAuthenticated, authToken }: IPropertyProsAuthenticatedUserState =
+      yield cmds.reduxGetState("authenticatedUser");
     if (!isAuthenticated) {
-      Alert.alert("You are currently not signed in, please signin!")
-      return
+      yield cmds.navigate(routes.DASHBOARD_ROUTE);
+      throw new UnauthenticatedError();
     }
-    let metadata = new Metadata({});
-    metadata.set("authorization", authToken!);
 
-    let response:GetNotePurchaseAgreementsResponse;
+    let response: GetNotePurchaseAgreementsResponse;
     try {
-      response = yield cmds.callFn(notePurchaseAgreementDocClient.getNotePurchaseAgreements, 
+      response = yield cmds.callFn(
+        notePurchaseAgreementClient.getNotePurchaseAgreements,
         {},
-        { metadata })
-      } catch(err) {
-        Alert.alert("Failed to fetch data, Please try again!")
-        return
-      }
+      );
+    } catch (err) {
+      return;
+    }
 
-      return response
+    return response;
   },
 
   *getNotePurchaseAgreementDoc(notePurchaseAgreementId: any) {
-    const {
-      isAuthenticated,
-      authToken
-    }: IPropertyProsAuthenticatedUserState = yield cmds.reduxGetState("authenticatedUser");
+    const { isAuthenticated, authToken }: IPropertyProsAuthenticatedUserState =
+      yield cmds.reduxGetState("authenticatedUser");
     if (!isAuthenticated) {
-      Alert.alert("You are currently not signed in, please signin!")
-      return
+      Alert.alert("You are currently not signed in, please signin!");
+      return;
     }
 
-    let metadata = new Metadata({});
-    
-    metadata.set("authorization", authToken!);
-    const response = <sdk.GetNotePurchaseAgreementDocResponse>(
-      yield cmds.callFn(notePurchaseAgreementDocClient.getNotePurchaseAgreementDoc,{
+    const response = yield cmds.callFn(
+      notePurchaseAgreementClient.getNotePurchaseAgreementDoc,
+      {
         payload: {
           id: notePurchaseAgreementId,
         },
-      },
-      {metadata})
+      }
     );
 
-    return <Buffer>(
-      yield cmds.callFn(Buffer.from, response.fileContent)
-    );
+    return yield cmds.callFn(Buffer.from, response.fileContent, "base64");
   },
 } as Partial<IPropertyProsFunctions>;
 

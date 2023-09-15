@@ -19,8 +19,6 @@ export const reducerFunctions = {
     state: IPropertyProsSignInState,
     action: PayloadAction<string>
   ) => {
-    console.log("hrere")
-    console.log(action.payload)
     state.signInEmail = action.payload;
   },
   setSignInPassword: (
@@ -83,7 +81,7 @@ const signUpInitialState: IPropertyProsSignUpState = {
   signUpSignature: false,
   signUpTaxFilingStatus: "Single",
   signUpHasServedAsPlaintiff: false,
-  signUpCommittedPrinciple: "0",
+  signUpCommittedPrinciple: 0,
 };
 
 export const signUpReducerFunctions: IPropertyProsSignupStateActions = {
