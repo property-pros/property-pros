@@ -17,6 +17,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "icon": "./assets/images/icon.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.propertypros.invest"
     },
@@ -31,9 +32,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "623af60a-79a8-4c53-870b-3de0cbb5fd30"
+        "projectId": "fb875941-bb92-4cbd-ac59-3fbe5895aa0a"
       },
-      "PROPERTY_PROS_URL": "test",
       "EXPO_USE_DEV_MENU": "false"
     }
   }

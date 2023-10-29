@@ -5,7 +5,9 @@ import {
   IPropertyProsEffectCommands,
 } from "../../interface/IPropertyProsEffectsCommands";
 
-const baseApiUrl = "http://localhost:8000";
+const baseApiUrl = "https://property-pros-service-2cmojdnxfq-uw.a.run.app" 
+// || 
+// "http://localhost:8000";
 
 const services = {
   StatementService: {

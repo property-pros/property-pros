@@ -37,6 +37,7 @@ export default {
         },
         authenticateUserOptions
       );
+      console.log("authResult: ", authResult);
     } catch (err) {
       throw err;
     }

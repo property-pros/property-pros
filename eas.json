@@ -26,7 +26,8 @@
       },
       "env": {
         "SSH_KEY": "@SSH_KEY",
-        "ENVIRONMENT": "production"
+        "ENVIRONMENT": "production",
+        "EXPO_PUBLIC_API_URL": "https://api.production.com"
       },
       "ios": {
         "simulator": false,
@@ -38,6 +39,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "srt0422@gmail.com",
+        "ascAppId": "6470177099",
+        "appleTeamId": "83LDRSE3P9"
+      }
+    }
   }
 }
