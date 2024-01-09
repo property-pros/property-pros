@@ -91,7 +91,9 @@ interface IPropertyProsNavigationFunctions {
   openSignInScreen(): Promise<void> | Generator<never, void, unknown>;
   openSignUpScreen(): Promise<void> | Generator<never, void, unknown>;
   openDashboardScreen(): Promise<void> | Generator<never, void, unknown>;
-  openStatementScreen(): Promise<void> | Generator<never, void, unknown>;
+  openStatementScreen(
+    agreemendId: string
+  ): Promise<void> | Generator<never, void, unknown>;
   openAgreementScreen(
     agreemendId: string
   ): Promise<void> | Generator<never, void, unknown>;

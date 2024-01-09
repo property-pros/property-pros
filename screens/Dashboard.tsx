@@ -70,7 +70,7 @@ export default () => {
       setNpas(npaList);
 
       const statementItems = statementsList?.map((statement) => {
-        let date = new Date(statement.createdOn);
+        let date = new Date(statement.startPeriodDate);
         return {
           id: statement.id,
           title: `Statement ${date.toLocaleDateString()}`,

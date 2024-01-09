@@ -40,35 +40,18 @@ export default {
       return;
     }
 
+    console.log("fns: ", Object.keys(notePurchaseAgreementClient));
+    console.log("notePurchaseAgreementClient.streamNotePurchaseAgreementDoc: ", notePurchaseAgreementClient.streamNotePurchaseAgreementDoc);
+
     const response = yield cmds.callFn(
-      notePurchaseAgreementClient.getNotePurchaseAgreementDoc,
+      notePurchaseAgreementClient.streamNotePurchaseAgreementDoc,
       {
         payload: {
           id: notePurchaseAgreementId,
-        },
+        }
       }
     );
 
     return yield cmds.callFn(Buffer.from, response.fileContent, "base64");
   },
 } as Partial<IPropertyProsFunctions>;
-
-// try {
-//   await StorageAccessFramework.createFileAsync(
-//     permissions.directoryUri,
-//     fileName,
-//     "application/pdf"
-//   )
-//     .then(async (uri) => {
-//       await FileSystem.writeAsStringAsync(uri, base64Data, {
-//         encoding: FileSystem.EncodingType.Base64,
-//       });
-//     })
-//     .catch((e) => {
-//       console.log(e);
-//     });
-// } catch (e) {
-//   throw new Error(e);
-// }
-
-// return response;

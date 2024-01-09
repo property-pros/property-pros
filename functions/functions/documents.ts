@@ -26,10 +26,11 @@ export default {
       return;
     }
 
+    console.log("getting statement doc")
     const response = yield cmds.getStatementDoc({
       id: statementId,
     });
-
+    console.log("got statement doc")
     return yield cmds.callFn(Buffer.from, response.document, "base64");
   },
 };

@@ -30,6 +30,7 @@ export default {
       isAuthenticated: false,
       errorMessage: "",
     };
+    
     try {
       authResult = yield cmds.authenticateUser(
         {
