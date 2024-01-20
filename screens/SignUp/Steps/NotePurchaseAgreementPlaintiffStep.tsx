@@ -21,7 +21,7 @@ const NotePurchaseAgreementStep: FunctionComponent<
     setSignUpHasServedAsPlaintiff
   } = useAuth();
   return (
-    <SignUpStep title="Note Purchase Agreement">
+    <SignUpStep title="Note Purchase Agreement" testID="signUpStep3">
       <View style={styles.formContainer}>
         <Text style={styles.formItem}>
           If Investor has served, is currently serving, or reasonably expects to

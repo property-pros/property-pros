@@ -8,6 +8,9 @@ function* navigate(path: string) {
 
 export default {
   navigate,
+  *goBack() {
+    yield cmds.navigate(-1);
+  },
   *openSignInScreen() {
     yield cmds.call(navigate, routes.SIGN_IN);
   },
@@ -17,7 +20,10 @@ export default {
   *openDashboardScreen() {
     yield cmds.call(navigate, routes.DASHBOARD);
   },
-  *openStatementScreen() {
-    yield cmds.call(navigate, routes.STATEMENT_VIEW_ROUTE);
+  *openStatementScreen(statementId) {
+    yield cmds.call(navigate, `${routes.STATEMENT_VIEW_ROUTE}/${statementId}`);
   },
+  *openAgreementScreen(agreemendId: string) {
+    yield cmds.call(navigate, `${routes.NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}/${agreemendId}`)
+  }
 } as IPropertyProsNavigationFunctions;

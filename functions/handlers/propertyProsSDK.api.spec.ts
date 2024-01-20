@@ -1,29 +1,36 @@
 import { Metadata } from "nice-grpc-common";
 import {
-  authClient,
-  financeClient,
-  notePurchaseAgreementDocClient
-} from "./propertyProsSDK";
+  GetNotePurchaseAgreementsResponse,
+  SaveNotePurchaseAgreementResponse,
+} from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
+import { authClient, notePurchaseAgreementDocClient } from "./propertyProsSDK";
 
-const testSignupValues = {
-  signUpAddress: "40942 Belleray Ave Murrieta CA 92562",
-  signUpEmail: "propertyprosdemo@gmail.com",
-  signUpLegalCellPhone: "9512493842",
-  signUpLegalFirstName: "John",
-  signUpLegalLastName: "Doe",
-  signUpLegalSocialSecurityNumber: "123456789",
-  signUpPassword: "test",
-  signUpSignature: true,
-  signUpTaxFilingStatus: "Single",
+let emailAddress: string;
+let metadata: Metadata;
+let cachedAgreementsResult: GetNotePurchaseAgreementsResponse;
+let saveNotPurchaseAgreementResponse: SaveNotePurchaseAgreementResponse;
+
+const npAgreementPayloadFixture = {
+  firstName: "John",
+  lastName: "Doe",
+  dateOfBirth: "15/12/1993",
+  homeAddress: "40942 Belleray Ave Murrieta CA 92562",
+  phoneNumber: "9512493842",
+  user: {
+    emailAddress: `test+` + Math.random() + `@gmail.com`,
+    password: "test",
+  },
+  socialSecurity: "123456789",
+  fundsCommitted: 123,
+  fileContent: new TextEncoder().encode("test"),
 };
 
-const metadata = new Metadata({ ["is-test"]: "true" });
-
-async function shouldAuthenticate() {
+const getAuthMetadata = async (username: string, password: string) => {
+  let metadata = new Metadata({});
   let metadataResult: Metadata = new Metadata();
 
   const authResult = await authClient.authenticateUser(
-    { payload: { emailAddress: "test@test.com", password: "test" } },
+    { payload: { emailAddress: username, password: password } },
     {
       metadata,
       onHeader(header) {
@@ -33,41 +40,138 @@ async function shouldAuthenticate() {
   );
 
   expect(authResult).not.toBeNull();
-  expect(authResult.authenticated).toBe(true);
+  expect(authResult.isAuthenticated).toBe(true);
   expect(authResult.errorMessage).toBe("");
+
   expect(metadataResult).not.toBeNull();
 
   let authtoken = metadataResult.get("authorization")!;
 
-  expect(authtoken).toEqual("Basic Eg10ZXN0QHRlc3QuY29tGgR0ZXN0");
+  expect(authtoken).not.toEqual("");
 
   metadata.set("authorization", authtoken);
 
-  let userId = metadataResult.get("userId")!;
+  return metadata;
+};
 
-  expect(userId).not.toBeNull();
+async function getNotePurchaseAgreements() {
+  if (cachedAgreementsResult) {
+    return cachedAgreementsResult;
+  }
 
-  metadata.set("userIs", userId);
+  metadata = await getAuthMetadata(
+    emailAddress,
+    npAgreementPayloadFixture.user.password
+  );
+  cachedAgreementsResult =
+    await notePurchaseAgreementDocClient.getNotePurchaseAgreements(
+      {},
+      { metadata }
+    );
+  return cachedAgreementsResult;
 }
 
 describe("notePurchaseAgreements API integration test", function () {
-  it("should saveNotePurchaseAgreement", async function () {
-    await notePurchaseAgreementDocClient.saveNotePurchaseAgreement();
+  beforeEach(async () => {
+    emailAddress = `test+` + Math.random() + `@gmail.com`;
+    
+    saveNotPurchaseAgreementResponse =
+    await notePurchaseAgreementDocClient.saveNotePurchaseAgreement({
+      payload: {
+        ...npAgreementPayloadFixture,
+        user: {
+          emailAddress: emailAddress,
+          password: npAgreementPayloadFixture.user.password,
+        },
+      },
+    });
   });
 
-  it("should getNotePurchaseAgreementDoc", async function () {
-    const metadata = shouldAuthenticate();
+  it("should saveNotePurchaseAgreement", async function () {
+    expect(saveNotPurchaseAgreementResponse.payload).toBeDefined();
+    expect(saveNotPurchaseAgreementResponse.payload?.id).toBeDefined();
+    expect(saveNotPurchaseAgreementResponse.payload?.id).not.toBe("");
+  });
 
-    let agreementDocResult =
-      await notePurchaseAgreementDocClient.getNotePurchaseAgreementDoc(
+  it("should getNotePurchaseAgreement", async function () {
+    // let response: SaveNotePurchaseAgreementResponse = await notePurchaseAgreementDocClient.saveNotePurchaseAgreement({
+    //   payload: {...npAgreementPayloadFixture, user:{
+    //     emailAddress: emailAddress,
+    //     password: npAgreementPayloadFixture.user.password,
+    //   }}
+    // })
+
+    const agreements = await getNotePurchaseAgreements();
+
+    let metadata = await getAuthMetadata(
+      emailAddress,
+      npAgreementPayloadFixture.user.password
+    );
+    
+    let agreementResult =
+      await notePurchaseAgreementDocClient.getNotePurchaseAgreement(
         {
-          payload: {},
+          payload: {
+            id: agreements.payload?.payload?.[0]?.id,
+          },
         },
         { metadata }
       );
 
-    expect(agreementDocResult.fileContent).not.toBeNull();
-    expect(agreementDocResult.fileContent.length).toBeGreaterThan(0);
+    expect(agreementResult.payload).toBeDefined();
+    expect(agreementResult.payload?.id).toBeDefined();
+    expect(agreementResult.payload?.id).not.toBe("");
+    expect(agreementResult.payload?.firstName).toBe(
+      npAgreementPayloadFixture.firstName
+    );
+    expect(agreementResult.payload?.lastName).toBe(
+      npAgreementPayloadFixture.lastName
+    );
+    expect(agreementResult.payload?.dateOfBirth).toBe(
+      npAgreementPayloadFixture.dateOfBirth
+    );
+    expect(agreementResult.payload?.phoneNumber).toBe(
+      npAgreementPayloadFixture.phoneNumber
+    );
+    expect(agreementResult.payload?.socialSecurity).toBe(
+      npAgreementPayloadFixture.socialSecurity
+    );
+    expect(agreementResult.payload?.fundsCommitted).toBe(
+      npAgreementPayloadFixture.fundsCommitted
+    );
+  });
+
+  it("should getNotePurchaseAgreements", async function () {
+    // let response: SaveNotePurchaseAgreementResponse = await notePurchaseAgreementDocClient.saveNotePurchaseAgreement({
+    //   payload: {...npAgreementPayloadFixture, user:{
+    //     emailAddress: emailAddress,
+    //     password: npAgreementPayloadFixture.user.password,
+    //   }}
+    // })
+
+    let agreementsResult = await getNotePurchaseAgreements();
+
+    expect(agreementsResult.payload).toBeDefined();
+    expect(agreementsResult.payload?.payload).toBeDefined();
+    expect(agreementsResult.payload?.payload[0]).not.toBeDefined;
+    expect(agreementsResult.payload?.payload[0]?.id).toBeDefined;
+    expect(agreementsResult.payload?.payload[0]?.createdOn).toBeDefined;
+  });
+
+  it("should getNotePurchaseAgreementDoc", async function () {
+    let agreementsResult = await getNotePurchaseAgreements();
+
+    let docResult =
+      await notePurchaseAgreementDocClient.getNotePurchaseAgreementDoc(
+        {
+          payload: {
+            id: agreementsResult?.payload.payload?.[0].id,
+          },
+        },
+        { metadata }
+      );
+
+    expect(docResult.fileContent).toBeDefined();
   });
 });
 

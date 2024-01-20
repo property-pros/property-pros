@@ -4,18 +4,24 @@ import {
   Icon,
   List,
   ListItem,
-  Text
+  Text,
 } from "@ui-kitten/components";
-import { ComponentProps } from "react";
+import { GetNotePurchaseAgreementsResponse } from "property-pros-sdk/api/note_purchase_agreement/v1/note_purchase_agreement";
+import { ComponentProps, useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { LineChart, PieChart } from "../components/charts";
-import { useNavigation } from "../hooks";
+import {
+  useDocuments,
+  useNavigation,
+  useNotePurchaseAgreement,
+} from "../hooks";
 
-const data = [
-  {
-    title: "Note Purchase Agreement Oct 2022",
-    description: "Note purchase agreement from your october investment",
-  },
+interface Documents {
+  id?: string;
+  title: string;
+  description: string;
+}
+const statements: Documents[] = [
   {
     title: "October 2022",
     description: "Interest Statement for October",
@@ -36,21 +42,81 @@ const data = [
 
 export default () => {
   const nav = useNavigation();
+  const { getNotePurchaseAgreements } = useNotePurchaseAgreement();
+  const { getUserDocumentsList: getDocumentsList } = useDocuments();
+  const [npas, setNpas] = useState<Documents[]>([]);
+  const [statements, setStatements] = useState<Documents[]>([]);
 
-  const renderItemAccessory = (props: any) => (
-    <Button size="tiny" onPress={() => nav.openStatementScreen()}>
+  const fetchAgreements = useCallback(async () => {
+    try {
+      let docs: Documents[] = [];
+      const { payload: statementsList } = await getDocumentsList();
+      console.log("statements are: ", statementsList);
+
+      const { payload }: GetNotePurchaseAgreementsResponse =
+        await getNotePurchaseAgreements();
+      console.log("agreements are: ");
+      console.log(payload);
+      const npaList = payload?.map((agreement) => {
+        let date = new Date(agreement.createdOn);
+        return {
+          id: agreement.id,
+          title: `Note Purchase Agreement ${date.toLocaleDateString()}`,
+          description: "Note Purchase Agreement",
+        };
+      });
+      console.log("here");
+      console.log(npaList);
+      setNpas(npaList);
+
+      const statementItems = statementsList?.map((statement) => {
+        let date = new Date(statement.startPeriodDate);
+        return {
+          id: statement.id,
+          title: `Statement ${date.toLocaleDateString()}`,
+          description: "Interest Statement",
+        };
+      });
+
+      setStatements(statementItems);
+    } catch (error) {
+      console.error("error fetching note purchase agreements for user ", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAgreements();
+  }, [fetchAgreements]);
+
+  const renderStatementAccessory = (statementId) => (
+    <Button size="tiny" onPress={() => nav.openStatementScreen(statementId)}>
       <Text>VIEW</Text>
     </Button>
   );
 
-  const renderItemIcon = (props: any) => <Icon {...props} name="file" />;
+  const renderNpaAccessory = (agreementId: string) => {
+    return (
+      <Button size="tiny" onPress={() => nav.openAgreementScreen(agreementId)}>
+        <Text>VIEW</Text>
+      </Button>
+    );
+  };
 
-  const renderItem = ({ item, index }: any) => (
+  const renderItemIcon = (props: any) => <Icon {...props} name="file" />;
+  const renderNpa = ({ item, index }: any) => (
     <ListItem
       title={`${item.title}`}
       description={`${item.description}`}
       accessoryLeft={renderItemIcon}
-      accessoryRight={renderItemAccessory}
+      accessoryRight={() => renderNpaAccessory(item.id)}
+    />
+  );
+  const renderStatement = ({ item, index }: any) => (
+    <ListItem
+      title={`${item.title}`}
+      description={`${item.description}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={()=> renderStatementAccessory(item.id)}
     />
   );
 
@@ -58,7 +124,8 @@ export default () => {
     <>
       <DashboardSection>
         <DasboardHeading>My Documents</DasboardHeading>
-        <List data={data} renderItem={renderItem} />
+        <List data={npas} renderItem={renderNpa} />
+        <List data={statements} renderItem={renderStatement} />
       </DashboardSection>
       <ScrollView>
         <DashboardSection>

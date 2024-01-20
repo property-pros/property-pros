@@ -1,22 +1,18 @@
-import { FunctionComponent, ReactElement } from "react";
-import { View } from "react-native";
 import {
-  StyleService,
-  Text,
-  useStyleSheet,
-  Input,
   CheckBox,
-  Layout,
+  IndexPath,
+  Input,
   Select,
   SelectItem,
-  IndexPath,
+  StyleService,
+  useStyleSheet,
 } from "@ui-kitten/components";
-import { IInvestorConfidentialInfoStep } from "../../../interface/interfaces";
-import SignUpStep from "./SignUpStep";
-import { themedStyles as theme } from "../../styles";
-import { ProfileAvatar } from "../../../components/profile-avatar.component";
+import { FunctionComponent, ReactElement } from "react";
+import { View } from "react-native";
 import { useAuth } from "../../../hooks";
-import { PersonIcon } from "../extra/icons";
+import { IInvestorConfidentialInfoStep } from "../../../interface/interfaces";
+import { themedStyles as theme } from "../../styles";
+import SignUpStep from "./SignUpStep";
 
 const InvestorConfidentialInfoStep: FunctionComponent<
 IInvestorConfidentialInfoStep
@@ -59,12 +55,13 @@ IInvestorConfidentialInfoStep
           ))}
         </Select>
 
-        <Input
+        <Input        
           placeholder="Committed Principle"
           label="Committed Principle"
           value={signUpCommittedPrinciple}
           onChangeText={setSignUpCommittedPrinciple}
           style={styles.formItem}
+          keyboardType="numeric"
         />
         <CheckBox
           style={styles.formItem}

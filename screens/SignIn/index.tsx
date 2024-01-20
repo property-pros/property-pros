@@ -1,20 +1,20 @@
-import React, { FunctionComponent, ReactElement } from "react";
-import { View, TouchableWithoutFeedback } from "react-native";
 import {
   Button,
+  Icon,
   Input,
   Layout,
   StyleService,
   Text,
   useStyleSheet,
-  Icon,
 } from "@ui-kitten/components";
-import { PersonIcon } from "./extra/icons";
-import { KeyboardAvoidingView } from "./extra/3rd-party";
-import { useNavigation, useAuth } from "../../hooks";
+import React, { FunctionComponent, ReactElement, useEffect } from "react";
+import { TouchableWithoutFeedback, View } from "react-native";
+import { ProfileAvatar } from "../../components/profile-avatar.component";
+import { useAuth } from "../../hooks";
 import { RegistrationEntryLink } from "../../navigation/Links";
 import { themedStyles as theme } from "../styles";
-import { ProfileAvatar } from "../../components/profile-avatar.component";
+import { KeyboardAvoidingView } from "./extra/3rd-party";
+import { PersonIcon } from "./extra/icons";
 
 const SignInScreen: FunctionComponent<
   IPropertyProseSignInProps
@@ -23,12 +23,24 @@ const SignInScreen: FunctionComponent<
 
   const {
     signIn,
-    setSigninPassword,
-     setSignInEmail,
+    setSignInPassword,
+    setSignInEmail,
     signInEmail,
     signInPassword,
   } = useAuth();
 
+  useEffect(() => {
+    async function test() {
+      await setSignInEmail("srt0422@yahoo.com");
+      await setSignInPassword("password");
+      await signIn();
+    }
+
+    // test().catch(function (err) {
+    //   console.log("sign in error: ", err, err.stack);
+    // });
+    return function () {};
+  }, []);
   const styles = useStyleSheet({ ...theme, ...themedStyles });
 
   const onForgotPasswordButtonPress = (): void => {
@@ -46,7 +58,7 @@ const SignInScreen: FunctionComponent<
   );
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} testID="signIn">
       <View style={styles.headerContainer}>
         <ProfileAvatar
           style={styles.profileAvatar as any}
@@ -59,6 +71,7 @@ const SignInScreen: FunctionComponent<
       </View>
       <Layout style={styles.formContainer} level="1">
         <Input
+          autoCapitalize="none"
           placeholder="Email"
           accessoryRight={PersonIcon as any}
           value={signInEmail}
@@ -70,8 +83,9 @@ const SignInScreen: FunctionComponent<
           accessoryRight={renderPasswordIcon}
           value={signInPassword}
           secureTextEntry={!passwordVisible}
-          onChangeText={setSigninPassword}
+          onChangeText={setSignInPassword}
         />
+
         <View style={styles.forgotPasswordContainer}>
           <Button
             style={styles.forgotPasswordButton}
@@ -83,10 +97,20 @@ const SignInScreen: FunctionComponent<
           </Button>
         </View>
       </Layout>
-      <Button style={styles.signInButton} onPress={signIn} size="giant">
+      <Button
+        style={styles.signInButton}
+        onPress={signIn}
+        size="giant"
+        testID="signInButton"
+      >
         SIGN IN
       </Button>
-      <Button style={styles.signUpButton} appearance="ghost" status="basic">
+      <Button
+        style={styles.signUpButton}
+        appearance="ghost"
+        status="basic"
+        testID="signUpButton"
+      >
         <RegistrationEntryLink>
           <Text>Don't have an account? Create</Text>
         </RegistrationEntryLink>

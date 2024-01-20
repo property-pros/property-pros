@@ -1,203 +1,241 @@
-import { grpc } from "@improbable-eng/grpc-web";
-import { NodeHttpTransport } from "@improbable-eng/grpc-web-node-http-transport";
-import { CallOptions } from "nice-grpc-common";
-import { createChannel, createClient } from "nice-grpc-web";
-import { auth, finance, notePurchaseAgreement } from "property-pros-sdk";
+import axios, { Method, AxiosResponse } from "axios";
+import {
+  EffectCommand,
+  IApiClientCommand,
+  IPropertyProsEffectCommands,
+} from "../../interface/IPropertyProsEffectsCommands";
 
-// Do this first, before you make any grpc requests!
-grpc.setDefaultTransport(NodeHttpTransport());
+const baseApiUrl = "https://property-pros-service-2cmojdnxfq-uw.a.run.app";
+// const baseApiUrl = "http://localhost:8030";
 
-const channel = createChannel("http://localhost:8000");
-
-//notepurchaseagreement exports
-const {
-  NotePurchaseAgreementServiceDefinition,
-  GetNotePurchaseAgreementRequest,
-  GetNotePurchaseAgreementResponse,
-  GetNotePurchaseAgreementsRequest,
-  GetNotePurchaseAgreementsResponse,
-  GetNotePurchaseAgreementDocRequest,
-  GetNotePurchaseAgreementDocResponse,
-  NotePurchaseAgreementRecord: NotePurchaseAgreement,
-  SaveNotePurchaseAgreementRequest,
-  SaveNotePurchaseAgreementResponse,
-} = notePurchaseAgreement;
-
-//notepurchaseagreement types
-
-type NotePurchaseAgreementServiceClient =
-  notePurchaseAgreement.NotePurchaseAgreementServiceClient;
-type GetNotePurchaseAgreementRequest =
-  notePurchaseAgreement.GetNotePurchaseAgreementRequest;
-export type GetNotePurchaseAgreementResponse =
-  notePurchaseAgreement.GetNotePurchaseAgreementResponse;
-type GetNotePurchaseAgreementsRequest =
-  notePurchaseAgreement.GetNotePurchaseAgreementsRequest;
-export type GetNotePurchaseAgreementsResponse =
-  notePurchaseAgreement.GetNotePurchaseAgreementsResponse;
-type GetNotePurchaseAgreementDocRequest =
-  notePurchaseAgreement.GetNotePurchaseAgreementDocRequest;
-export type GetNotePurchaseAgreementDocResponse =
-  notePurchaseAgreement.GetNotePurchaseAgreementDocResponse;
-
-//auth exports
-const {
-  AuthenticationServiceDefinition,
-  User,
-  AuthenticateUserRequest,
-  AuthenticateUserResponse,
-} = auth;
-
-type DeepPartial<T> = notePurchaseAgreement.DeepPartial<T>;
-
-type NotePurchaseAgreement = notePurchaseAgreement.NotePurchaseAgreementRecord;
-type SaveNotePurchaseAgreementRequest =
-  notePurchaseAgreement.SaveNotePurchaseAgreementRequest;
-type SaveNotePurchaseAgreementResponse =
-  notePurchaseAgreement.SaveNotePurchaseAgreementResponse;
-
-export const typeDefinitions = {
-  ...NotePurchaseAgreementServiceDefinition.methods,
-  ...auth.AuthenticationServiceDefinition.methods,
-  ...finance.FinanceServiceDefinition.methods,
+const services = {
+  StatementService: {
+    GetStatements: "/v1/statements",
+    GetStatementDoc: "/v1/statement/{id}/file",
+  },
+  NotePurchaseAgreementService: {
+    GetNotePurchaseAgreements: "/v1/notepurchaseagreements",
+    GetNotePurchaseAgreement: "/v1/notepurchaseagreement",
+    SaveNotePurchaseAgreement: "/v1/notepurchaseagreement",
+    StreamNotePurchaseAgreementDoc: "/v1/notepurchaseagreement/{id}/file",
+  },
+  AuthenticationService: {
+    AuthenticateUser: "/v1/authenticate-user",
+  },
 };
 
-//notepurchaseagreement client setup
-export const notePurchaseAgreementDocClient = createClient(
-  NotePurchaseAgreementServiceDefinition,
-  channel
-) as NotePurchaseAgreementServiceClient;
+function getMethodType(methodName): Method {
+  if (methodName.startsWith("Get") || methodName.startsWith("Stream"))
+    return "get";
+  if (methodName.startsWith("Save")) return "post";
+  if (methodName.startsWith("Update")) return "put";
+  return "post";
+}
 
-//auth types
-type AuthenticationServiceClient = auth.AuthenticationServiceClient;
-type AuthenticateUserRequest = auth.AuthenticateUserRequest;
-export type AuthenticateUserResponse = auth.AuthenticateUserResponse;
-type User = auth.User;
+function getResponseType(methodName): string {
+  if (methodName.startsWith("Stream")) return "stream";
 
-//auth client setup
-export const authClient = createClient(
-  AuthenticationServiceDefinition,
-  channel
-) as AuthenticationServiceClient;
+  return "json";
+}
 
-const clientMethods = MapClientMethods(
-  (methodKey: string) => (args: ClientParameters) => {
-    console.log("args: ", args);
-    return () => {
-      console.log(methodKey, ": ", args.payload);
+const apiClient: ApiClient = {} as any;
+for (const [serviceName, service] of Object.entries(services)) {
+  apiClient[serviceName] = {};
+  for (const [methodName, path] of Object.entries(service)) {
+    const methodType = getMethodType(methodName);
+    const uncapitalizedMethodName =
+      methodName.charAt(0).toLowerCase() + methodName.slice(1);
+
+    apiClient[serviceName][uncapitalizedMethodName] = async ({
+      payload: data,
+      options,
+    }) => {
+      try {
+        const config = {
+          url: `${baseApiUrl}${path}`,
+          method: methodType,
+          data: null,
+          headers: { ...defaultHeaders },
+          responseType: getResponseType(methodName),
+        };
+        console.log(`${serviceName}.${uncapitalizedMethodName}`);
+        if (methodType === "get") {
+          if (data && Object.keys(data).length > 0) {
+            console.log("data: ", data);
+            //check if a data key is in the url in the format of {key}; if so, replace it with the value otherwise append the value to the end of the url
+            const requestKeys = Object.keys(data);
+
+            requestKeys.forEach((key) => {
+              console.log("key: ", key);
+              console.log("config url: ", config.url);
+              if (config.url.includes(`{${key}}`)) {
+                console.log("key: ", key);
+                console.log("value: ", data[key]);
+                config.url = config.url.replace(`{${key}}`, data[key]);
+                delete data[key];
+              }
+            });
+
+            config.url += `/${Object.keys(data)
+              .map((key) => `${data[key]}`)
+              .join("/")}`;
+
+            config.url = config.url.replace(/\/*$/g, "");
+
+            console.log(
+              "url: ",
+              `/${Object.keys(data)
+                .map((key) => `${data[key]}`)
+                .join("/")
+                .replace(/\/+$/, "")}`
+            );
+            console.log(
+              "url: ",
+              `/${Object.keys(data)
+                .map((key) => `${data[key]}`)
+                .join("/")}`
+            );
+          }
+        } else {
+          config.data = data;
+        }
+
+        console.log("data after: ", data);
+        console.log("config: ", config);
+        const response = await sendRequest(config);
+
+        if (serviceName === "AuthenticationService") {
+          if (uncapitalizedMethodName === "authenticateUser") {
+            defaultHeaders = {
+              "grpc-metadata-authorization":
+                response.headers["grpc-metadata-authorization"],
+            };
+
+            options.onHeader({
+              authToken: response.headers["grpc-metadata-authorization"],
+            });
+          }
+        }
+        //TODO: what's the best way to get all the data?
+        if (config.responseType === "stream") {
+          return await processStream(config);
+        }
+
+        return response.data;
+      } catch (error) {
+        console.error(
+          `Error in ${serviceName}.${uncapitalizedMethodName}:`,
+          error
+        );
+        return error;
+      }
     };
-    //TODO: finish server integration, including auth
-    //return (notePurchaseAgreementDocClient as any)[methodKey](args.payload);
   }
-);
-
-//notepurchaseagreement interfaces
-export interface NotePurchaseAgreementClient {
-  getNotePurchaseAgreementDoc<CallOptionsExt>(
-    request: DeepPartial<GetNotePurchaseAgreementDocRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, GetNotePurchaseAgreementDocResponse, unknown>;
-  getNotePurchaseAgreement<CallOptionsExt>(
-    request: DeepPartial<GetNotePurchaseAgreementRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, GetNotePurchaseAgreementResponse, unknown>;
-  getNotePurchaseAgreements<CallOptionsExt>(
-    request: DeepPartial<GetNotePurchaseAgreementsRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, GetNotePurchaseAgreementsResponse, unknown>;
-  saveNotePurchaseAgreement<CallOptionsExt>(
-    request: DeepPartial<SaveNotePurchaseAgreementRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, SaveNotePurchaseAgreementResponse, unknown>;
 }
 
-//auth interfaces
-export interface AuthClient {
-  authenticateUser<CallOptionsExt>(
-    request: DeepPartial<AuthenticateUserRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, AuthenticateUserResponse, unknown>;
+let defaultHeaders = {};
+
+async function sendRequest(config) {
+  try {
+    return await axios(config);
+  } catch (error) {
+    console.error("Error during stream request:", error);
+    throw error; // rethrow the error for the caller to handle
+  }
 }
 
-interface ClientParameters {
-  payload: any;
+async function processStream(config) {
+  const streamResponse = await sendRequest(config);
+  // let counter = 0;
+  // let content = "";
+  // console.log("streamResponse: ", streamResponse);
+  // for await (const chunk of streamResponse.data) {
+  //   counter++;
+  //   // Process each chunk
+  //   console.log("Received chunk ", counter, ": ", chunk);
+  //   content += chunk;
+  // }
+  // const response = { data: content };
+  // console.log("Stream ended");
+  console.log("stream data: ", streamResponse.data);
+  return streamResponse.data.result;
+}
+
+// Define a function that retries a promise with exponential backoff
+function retryWithBackoff(promiseFn, maxRetries, delay) {
+  return new Promise((resolve, reject) => {
+    // Define a recursive function that attempts to resolve the promise
+    function attempt() {
+      // Call the promise function and handle the result
+      promiseFn()
+        .then(resolve) // If the promise is resolved, resolve the outer promise
+        .catch((error) => {
+          // If the promise is rejected, check the error
+          if (error.response.status === 503 && maxRetries > 0) {
+            // If the error is 503 and there are more retries left, wait for the delay and try again
+            setTimeout(attempt, delay);
+            // Decrease the max retries and increase the delay exponentially
+            maxRetries--;
+            delay *= 2;
+          } else {
+            // Otherwise, reject the outer promise with the error
+            reject(error);
+          }
+        });
+    }
+    // Call the attempt function for the first time
+    attempt();
+  });
 }
 
 export function MapClientMethods(
-  fn: (key: string) => Function
-): NotePurchaseAgreementServiceClient {
-  const methodNames: string[] = Object.keys(typeDefinitions) as any;
+  fn: (key: string) => IApiClientCommand
+): ApiClient {
+  let client: ApiClient = {} as any;
 
-  let client: any = {};
-  for (let i = 0; i < methodNames.length; i++) {
-    let it: any = methodNames[i];
-
-    client[it] = fn(it);
+  for (const serviceName in services) {
+    for (const methodName in services[serviceName]) {
+      const uncapitalizedMethodName =
+        methodName.charAt(0).toLowerCase() + methodName.slice(1);
+      client[uncapitalizedMethodName] = fn(uncapitalizedMethodName);
+    }
   }
 
-  return client as NotePurchaseAgreementServiceClient & AuthClient;
+  return client;
 }
 
-//finance types
-type FinanceServiceClient = finance.FinanceServiceClient;
-type GetAccountRequest = finance.GetAccountRequest;
-type GetAccountResponse = finance.GetAccountResponse;
-type GetAccountsRequest = finance.GetAccountsRequest;
-type GetAccountsResponse = finance.GetAccountsResponse;
-type GetTransactionRequest = finance.GetTransactionRequest;
-type GetTransactionResponse = finance.GetTransactionResponse;
-type GetTransactionsRequest = finance.GetTransactionsRequest;
-type GetTransactionsResponse = finance.GetTransactionsResponse;
-type GetBalanceRequest = finance.GetBalanceRequest;
-type GetBalanceResponse = finance.GetBalanceResponse;
-type GetBalancesRequest = finance.GetBalancesRequest;
-type GetBalancesResponse = finance.GetBalancesResponse;
+export default apiClient;
 
-type Account = finance.Account;
-type Transaction = finance.Transaction;
-type Balance = finance.Balance;
-type SaveFinancialItemRequest = finance.SaveFinancialItemRequest;
+export const notePurchaseAgreementClient: NotePurchaseAgreementService =
+  apiClient.NotePurchaseAgreementService;
+export const authClient: AuthenticationService =
+  apiClient.AuthenticationService;
+export const statementClient: StatementService = apiClient.StatementService;
 
-type SaveFinancialItemResponse = finance.SaveFinancialItemResponse;
+export interface ServiceMethod {
+  (data?: any): Promise<any>;
+}
 
-//finance client
+export interface StatementService {
+  getStatements: ServiceMethod;
+  getStatementDoc: ServiceMethod;
+}
 
-//financeClient client setup
-export const financeClient = createClient(
-  finance.FinanceServiceDefinition,
-  channel
-) as finance.FinanceServiceClient;
+export interface NotePurchaseAgreementService {
+  getNotePurchaseAgreements: ServiceMethod;
+  getNotePurchaseAgreement: ServiceMethod;
+  saveNotePurchaseAgreement: ServiceMethod;
+  streamNotePurchaseAgreementDoc: ServiceMethod;
+}
 
-//finance interfaces
-export interface FinanceClient {
-  // getAccount<CallOptionsExt>(
-  //   request: DeepPartial<GetAccountRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetAccountResponse, unknown>;
-  // getAccounts<CallOptionsExt>(
-  //   request: DeepPartial<GetAccountsRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetAccountsResponse, unknown>;
-  // getBalance<CallOptionsExt>(
-  //   request: DeepPartial<GetBalanceRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetBalanceResponse, unknown>;
-  // getBalances<CallOptionsExt>(
-  //   request: DeepPartial<GetBalancesRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetBalancesResponse, unknown>;
-  // getTransaction<CallOptionsExt>(
-  //   request: DeepPartial<GetTransactionRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetTransactionResponse, unknown>;
-  // getTransactions<CallOptionsExt>(
-  //   request: DeepPartial<GetTransactionsRequest>,
-  //   options?: CallOptions & CallOptionsExt
-  // ): Generator<never, GetTransactionsResponse, unknown>;
-  saveFinancialItem<CallOptionsExt>(
-    request: DeepPartial<SaveFinancialItemRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Generator<never, SaveFinancialItemResponse, unknown>;
+export interface AuthenticationService {
+  authenticateUser: ServiceMethod;
+}
+
+export interface ApiClient {
+  StatementService: StatementService;
+  NotePurchaseAgreementService: NotePurchaseAgreementService;
+  AuthenticationService: AuthenticationService;
 }
 
 //TODO: move each client to separate file

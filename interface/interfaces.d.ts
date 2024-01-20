@@ -6,6 +6,7 @@ import { IPropertyProsNavigationFunctions } from "./IPropertyProsFunctions";
 interface IPropertyProsState {
   signIn: IPropertyProsSignInState;
   signUp: IPropertyProsSignUpState;
+  authenticatedUser: IPropertyProsAuthenticatedUserState;
   navigation: INavigationState;
 }
 
@@ -17,18 +18,22 @@ interface IPropertyProsSignUpState {
   signUpLegalCellPhone: string;
 
   signUpAddress: string;
-  signUpLegalSocialSecurityNumber: nubmer;
+  signUpLegalSocialSecurityNumber: string;
   signUpTaxFilingStatus: string;
-  signUpDate: Date;
+  signUpDate: string;
   signUpSignature: boolean;
   signUpHasServedAsPlaintiff: boolean;
-  signUpHasNotServedAsPlaintiff: boolean;
   signUpCommittedPrinciple: number;
 }
 
 interface IPropertyProsSignInState {
   signInEmail: string;
-  signInPassword: string;
+  signInPassword: string;  
+}
+
+interface IPropertyProsAuthenticatedUserState {
+  isAuthenticated: boolean
+  authToken?: string
 }
 
 interface IPropertyProsSignupStateActions {
@@ -125,6 +130,7 @@ interface IPropertyProsSignUpItemProps {
   title: string;
   description?: ReactNode;
   children: ReactNode;
+  testID?: string;
 }
 
 interface INotePurchaseAgreementStepProps {}

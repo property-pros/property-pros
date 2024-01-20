@@ -1,14 +1,18 @@
 import {
-  Button, Icon, StyleService, Text, useStyleSheet
+  Button,
+  Icon,
+  StyleService,
+  Text,
+  useStyleSheet,
 } from "@ui-kitten/components";
 import React, { ReactElement } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { Wizard } from "react-use-wizard";
 import { themedStyles as theme } from "../styles";
-import { PlusIcon } from "./extra/icons";
 import NotePurchaseAgreementLegalAuthStep from "./Steps/NotePurchaseAgreementLegalAuthStep";
 import NotePurchaseAgreementPlaintiffStep from "./Steps/NotePurchaseAgreementPlaintiffStep";
 import NotePurchaseAgreementProfileStep from "./Steps/NotePurchaseAgreementProfileStep";
+import { PlusIcon } from "./extra/icons";
 
 export default ({ navigation }: any): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
@@ -17,7 +21,6 @@ export default ({ navigation }: any): React.ReactElement => {
   const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
   const styles = useStyleSheet({ ...theme, ...themedStyles });
- 
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -55,7 +58,7 @@ export default ({ navigation }: any): React.ReactElement => {
   );
 
   return (
-    <Wizard startIndex={0}>
+    <Wizard startIndex={0} testID={"signUpContainer"} as any>
       <NotePurchaseAgreementProfileStep />
       <NotePurchaseAgreementLegalAuthStep />
       <NotePurchaseAgreementPlaintiffStep />

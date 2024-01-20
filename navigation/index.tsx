@@ -49,11 +49,15 @@ export default function navigation() {
           element={<ScreenWrapper component={Dashboard} />}
         />
         <Route
-          path={STATEMENT_VIEW_ROUTE}
+          path={`${STATEMENT_VIEW_ROUTE}/:statementId`}
           element={<ScreenWrapper component={Statement} />}
         />
         <Route
           path={NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}
+          element={<ScreenWrapper component={NotePurchaseAgreementViewer} />}
+        />
+        <Route
+          path={`${NOTE_PURCHASE_AGREEMENT_VIEW_ROUTE}/:notePurchaseAgreementId`}
           element={<ScreenWrapper component={NotePurchaseAgreementViewer} />}
         />
         <Route path="*" element={<Navigate to={SIGN_IN_ROUTE} />} />
