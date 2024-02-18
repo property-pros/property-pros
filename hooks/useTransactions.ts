@@ -29,6 +29,8 @@ export default function useTransactions(): UseTransationsResults {
     } finally {
       setLoading(false);
     }
+
+    console.log()
   }, []);
 
   useEffect(() => {

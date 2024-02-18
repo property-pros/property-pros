@@ -17,6 +17,12 @@
     },
     {
       "path": "../property-pros-docs"
+    },
+    {
+      "path": "../pp-test"
+    },
+    {
+      "path": "../property-pros"
     }
   ],
   "settings": {

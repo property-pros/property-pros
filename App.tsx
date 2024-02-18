@@ -12,7 +12,6 @@ import { getStore } from "./state/store";
 import theme from "./themes/property-pros-theme";
 
 export default function App() {
-  console.log("here");
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   if (!isLoadingComplete) {
