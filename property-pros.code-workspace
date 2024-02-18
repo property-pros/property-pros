@@ -1,20 +1,32 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../property-pros-service"
-		},
-		{
-			"path": "../property-pros-sdk"
-		},
-		{
-			"path": "../property-pros-docs"
-		}
-	],
-	"settings": {
-		"go.buildOnSave": "workspace",
-		"go.lintOnSave": "workspace"
-	}
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../property-pros-service"
+    },
+    {
+      "path": "../property-pros-sdk"
+    },
+    {
+      "path": "../expo-plaid-link"
+    },
+    {
+      "path": "../rn-pdf-reader-js"
+    },
+    {
+      "path": "../property-pros-docs"
+    },
+    {
+      "path": "../pp-test"
+    },
+    {
+      "path": "../property-pros"
+    }
+  ],
+  "settings": {
+    "go.buildOnSave": "workspace",
+    "go.lintOnSave": "workspace"
+  }
 }

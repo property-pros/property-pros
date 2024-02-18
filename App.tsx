@@ -14,7 +14,6 @@ import theme from "./themes/property-pros-theme";
 export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
   if (!isLoadingComplete) {
     return null;
   } else {
