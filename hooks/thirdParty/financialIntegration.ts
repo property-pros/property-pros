@@ -6,6 +6,7 @@ import {
 } from "plaid";
 export { default as TransactionLinkComponent } from "@burstware/expo-plaid-link";
 export type Transaction = PlaidTransaction;
+export { PlaidLink } from 'react-native-plaid-link-sdk';
 
 const configuration = new Configuration({
   basePath: PlaidEnvironments.sandbox,

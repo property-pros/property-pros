@@ -1,13 +1,13 @@
 import { Text } from "@ui-kitten/components";
 import React, { useState } from "react";
-// import PlaidLink, {
-//   LinkEvent,
-//   LinkEventListener,
-//   LinkExit,
-//   LinkExitListener,
-//   LinkSuccess,
-//   LinkSuccessListener
-// } from "react-native-plaid-link-sdk";
+import PlaidLink, {
+  LinkEvent,
+  LinkEventListener,
+  LinkExit,
+  LinkExitListener,
+  LinkSuccess,
+  LinkSuccessListener
+} from "react-native-plaid-link-sdk";
 import { View } from "../../components/Themed";
 import useTransactions from "../../hooks/useTransactions";
 import { financial as constants } from "../../constants";
@@ -22,7 +22,11 @@ const Transactions: React.FC = () => {
     useTransactions();
 
   // Define a handler function that receives the link success data
-  const handleSuccess = onLinkSuccess;
+  // const handleSuccess = onLinkSuccess;
+  const handleSuccess = (data: LinkSuccess) => {
+    console.log("success data: ", data);
+    onLinkSuccess(data.publicToken);
+  };
 
   // Define a handler function that receives the link exit data
   const handleExit = (data: any) => {
@@ -66,14 +70,15 @@ const Transactions: React.FC = () => {
       {error ? (
         <Text>{error?.toString()}</Text>
       ) : (
-        <TransactionLink
+        <PlaidLink
+        
           onSuccess={handleSuccess}
           onExit={handleExit}
           onEvent={handleEvent}
           linkToken={token}
         >
           <Text>Connect your bank account</Text>
-        </TransactionLink>
+        </PlaidLink>
       )}
     </>
   );
