@@ -22,7 +22,10 @@
       "path": "../pp-test"
     },
     {
-      "path": "../property-pros"
+      "path": "../property-pros-crna"
+    },
+    {
+      "path": "../react-native-plaid-link-sdk"
     }
   ],
   "settings": {

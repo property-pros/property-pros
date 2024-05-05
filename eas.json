@@ -12,6 +12,7 @@
       }
     },
     "preview": {
+      "channel": "preview",
       "distribution": "internal",
       "env": {
         "SSH_KEY": "@SSH_KEY"
@@ -21,6 +22,7 @@
       "node": "18.17.1",
       "yarn": "1.22.19",
       "distribution": "store",
+      "channel": "production",
       "cache": {
         "disabled": true
       },
