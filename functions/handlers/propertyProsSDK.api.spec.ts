@@ -174,3 +174,26 @@ describe("notePurchaseAgreements API integration test", function () {
     expect(docResult.fileContent).toBeDefined();
   });
 });
+
+// Test client for ../property-pros-sdk/api/finance/v1/finance.proto
+describe("financial API integration test", function () {
+  it("should save financial item", async function () {});
+
+  it("should get financial items", async function () {
+    const metadata = shouldAuthenticate();
+
+    let financialItemResult = await financeClient.getFinancialItems(
+      {
+        payload: {},
+      },
+      { metadata }
+    );
+
+    expect(financialItemResult).not.toBeNull();
+    expect(financialItemResult.financialItem).not.toBeNull();
+    expect(financialItemResult.financialItem.id).toEqual("1");
+    expect(financialItemResult.financialItem.name).toEqual("test");
+    expect(financialItemResult.financialItem.type).toEqual("test");
+    expect(financialItemResult.financialItem.value).toEqual(1);
+  });
+});

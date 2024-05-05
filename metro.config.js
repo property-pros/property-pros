@@ -4,9 +4,8 @@ const propertyProsSdkPath = path.resolve(__dirname + "/../property-pros-sdk");
 const fontkitPath = path.resolve(__dirname + "/node_modules/fontkit");
 
 const defaultConfig = getDefaultConfig(__dirname);
-const {
-  resolver: { sourceExts, assetExts },
-} = defaultConfig;
+const { resolver } = defaultConfig,
+  { sourceExts, assetExts } = resolver;
 
 const extraNodeModules = {
   // "property-pros-sdk": propertyProsSdkPath,
@@ -14,7 +13,7 @@ const extraNodeModules = {
   fontkit: fontkitPath,
 };
 
-const watchFolders = [ 
+const watchFolders = [
   // propertyProsSdkPath
 ];
 
@@ -22,6 +21,7 @@ module.exports = (async () => {
   return {
     ...defaultConfig,
     transformer: {
+      ...defaultConfig.transformer,
       getTransformOptions: async () => ({
         transform: {
           experimentalImportSupport: false,
@@ -30,6 +30,7 @@ module.exports = (async () => {
       }),
     },
     resolver: {
+      ...resolver,
       extraNodeModules: new Proxy(extraNodeModules, {
         get: (target, name) => {
           //redirects dependencies referenced from common/ to local node_modules

@@ -237,3 +237,5 @@ export interface ApiClient {
   NotePurchaseAgreementService: NotePurchaseAgreementService;
   AuthenticationService: AuthenticationService;
 }
+
+//TODO: move each client to separate file
